@@ -1,0 +1,48 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+  {
+    "name": "Debug",
+    "type": "node",
+    "request": "launch",
+    "program": "${workspaceFolder}/src/debug/index.ts",
+    "stopOnEntry": false,
+    "args": [],
+    "cwd": "${workspaceFolder}",
+    "runtimeExecutable": null,
+    "runtimeArgs": [
+      "-r",
+      "ts-node/register"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "console": "internalConsole",
+    "sourceMaps": true,
+    "preLaunchTask": "build",
+    "outFiles": [
+      "${workspaceFolder}/dist/**/*.js"
+    ]
+  },
+  {
+    "type": "node",
+    "request": "launch",
+    "name": "Launch Program",
+    "program": "${workspaceFolder}\\dist\\debug\\index.js",
+    "preLaunchTask": "tsc: build - tsconfig.json",
+    "outFiles": [
+      "${workspaceFolder}/dist/**/*.js"
+    ]
+  },
+  {
+    "type": "chrome",
+    "request": "launch",
+    "name": "Debug Web",
+    "url": "http://localhost:3001",
+    "webRoot": "${workspaceFolder}",
+    "preLaunchTask": "start"
+  }]
+}
