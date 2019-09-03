@@ -1,12 +1,13 @@
 {
   "name": "blurp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Stream based Logger using Transports.",
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "tsc",
+    "build": "npm run clean && tsc",
     "start": "tsc -w",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

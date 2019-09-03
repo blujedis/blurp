@@ -45,6 +45,10 @@ class Transport extends base_1.Base {
         // Update the config with the name of the transform.
         // @ts-ignore
         payload[types_1.CONFIG].transform = this.label;
+        if (payload.level === 'write' || payload.level === 'writeLn') {
+            payload[types_1.OUTPUT] = payload.message;
+            return this.log(payload, cb);
+        }
         // If no transformer just return the payload.
         if (!this.transformer)
             return this.log(payload, cb);
@@ -116,6 +120,13 @@ class Transport extends base_1.Base {
     get level() {
         return this.options.level || this.logger.level;
     }
+    set level(level) {
+        if (!this.levels.includes(level)) {
+            this.console.warn(`Level "${level} ignored, valid levels [${this.levels.join(', ')}]`);
+            return;
+        }
+        this.options.level = level;
+    }
     get levels() {
         return this.logger.levels;
     }
@@ -124,16 +135,13 @@ class Transport extends base_1.Base {
             return -1;
         return this.levels.indexOf(this.level);
     }
-    get console() {
-        return utils_1.logger;
-    }
     /**
      * Compiles Transforms into single Transformer function.
      */
     compile() {
-        const transforms = (this.options.transforms || []).length ?
-            this.options.transforms :
-            (this.logger && this.logger.get('transforms')) || [];
+        const _transforms = utils_1.ensureArray(this.options.transforms);
+        const transforms = (_transforms || []).length ? _transforms :
+            (this.logger && utils_1.ensureArray(this.logger.get('transforms')) || []);
         if (transforms.length)
             this.transformer = create_1.combine(...transforms);
         return this;
@@ -173,6 +181,8 @@ class Transport extends base_1.Base {
     accept(obj) {
         const payload = obj.chunk || obj;
         const { level, err } = payload[types_1.SOURCE];
+        if (level === 'write' || level === 'writeLn')
+            return true;
         // If muted, invalid level or is exception reject.
         // exceptions handled directly by Exception stream.
         if (this.muted || !this.isActiveLevel(level, this.level) ||

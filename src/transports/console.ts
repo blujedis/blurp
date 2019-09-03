@@ -30,16 +30,18 @@ export class ConsoleTransport<L extends string> extends Transport<L, IConsoleTra
    */
   private dispatcher(level: L) {
 
+    const eol = this.options.eol;
+
     if (this.options.stream)
-      return { write: (message) => this.options.stream.write(message + this.options.eol) };
+      return { write: (message) => this.options.stream.write(message + eol) };
 
     // If not included in error levels use stdout or console.log.
     if (level === 'log' || !this.options.errorLevels.includes(level))
-      return wrapStream(console._stdout, console.log, this.options.eol);
+      return wrapStream(console._stdout, console.log, eol);
 
     // if error or warn use for fallback
     const fallbackConsole = ['error', 'warn'].includes(level) ? console[level as string] : console.log;
-    return wrapStream(console._stderr, fallbackConsole, this.options.eol);
+    return wrapStream(console._stderr, fallbackConsole, eol);
 
   }
 
@@ -54,7 +56,10 @@ export class ConsoleTransport<L extends string> extends Transport<L, IConsoleTra
 
     setImmediate(() => this.emit('payload', payload));
     const { [SOURCE]: source, [OUTPUT]: output } = payload;
-    this.dispatcher(source.level).write(output);
+    if (source.level === 'write' || source.level === 'writeLn')
+      process.stdout.write(output);
+    else
+      this.dispatcher(source.level).write(output);
     cb();
 
   }

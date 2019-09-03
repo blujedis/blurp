@@ -2,7 +2,7 @@ import { Base } from './base';
 import {
   ILoggerOptions, Colors, LoggerTransform, IPayload,
   ILogMessage, SOURCE, CONFIG, ErrorExt, MessageType, ITransportOptions,
-  Callback, ITransportFirehoseOptions
+  Callback, ITransportFirehoseOptions, OUTPUT
 } from './types';
 import { DEFAULT_LEVELS, DEFAULT_COLORS, PAYLOAD_DEFAULTS, FORMAT_EXP } from './constants';
 import { noop, ensureArray } from './utils';
@@ -71,8 +71,9 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
 
       // No Transports can't do anything.
       if (!this.stream._readableState.pipes) {
+        const { [CONFIG]: c, [SOURCE]: s, [OUTPUT]: o, ...clean } = payload;
         console.warn(
-          `${EOL}Logger ${this.label} failed using Transports of undefined${EOL}${EOL}Payload:${EOL} %O${EOL}`, payload
+          `${EOL}Logger ${this.label} failed using Transports of undefined${EOL}${EOL}Payload:${EOL} %O${EOL}`, clean
         );
         return cb(null);
       }
@@ -289,6 +290,14 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
     return this.options.levels;
   }
 
+  set level(level: L) {
+    if (!this.options.levels.includes(level)) {
+      this.console.warn(`Level "${level} ignored, valid levels [${this.options.levels.join(', ')}]`);
+      return;
+    }
+    this.options.level = level;
+  }
+
   get index() {
     if (this.options.level === 'log')
       return -1;
@@ -344,6 +353,8 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
       this.muted = true;
       return this;
     }
+    if (child[0] === '*')
+      child = [...this.children.keys()];
     this.children.toArray().forEach(c => child.includes(c.label) && c.mute());
     return this;
   }
@@ -358,6 +369,8 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
       this.muted = false;
       return this;
     }
+    if (child[0] === '*')
+      child = [...this.children.keys()];
     this.children.toArray().forEach(c => child.includes(c.label) && c.unmute());
     return this;
   }
@@ -472,8 +485,13 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
    * @param message the message to be written to the stream.
    * @param cb callback on stream finished writing.
    */
-  write(message: any, cb: Callback) {
-    this.stream.write(this.stingify(message), cb);
+  write(message: any, cb: Callback = noop) {
+    message = this.stingify(message);
+    const payload = {
+      level: 'write',
+      message
+    };
+    this.stream.write(this.extendPayload(payload), cb);
     return this;
   }
 
@@ -483,8 +501,13 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
    * @param message the message to be written to the stream.
    * @param cb callback on stream finished writing.
    */
-  writeLn(message: any, cb: Callback) {
-    this.stream.write(this.stingify(message) + EOL, cb);
+  writeLn(message: any, cb: Callback = noop) {
+    message = this.stingify(message) + EOL;
+    const payload = {
+      level: 'writeLn',
+      message
+    };
+    this.stream.write(this.extendPayload(payload), cb);
     return this;
   }
 

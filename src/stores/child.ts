@@ -6,6 +6,10 @@ export class ChildStore<L extends string> {
 
   private store = new Map<string, Logger<L>>();
 
+  keys() {
+    return this.store.keys();
+  }
+
   values() {
     return this.store.values();
   }

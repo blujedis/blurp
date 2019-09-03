@@ -2,6 +2,7 @@ import { Transport } from '../transports';
 import { Callback } from '../types';
 export declare class TransportStore<L extends string> {
     private store;
+    keys(): IterableIterator<string>;
     values(): IterableIterator<Transport<L, any>>;
     has(key: string): boolean;
     toArray(...keys: string[]): Array<Transport<L, any>>;

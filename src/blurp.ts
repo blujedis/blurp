@@ -30,7 +30,8 @@ function createLogger<L extends string = DefaultLevels>(
     options = label;
     label = undefined;
   }
-  label = label || Date.now() + '';
+  // Random string good collide I guess but unlikely good enough for here.
+ label = label || ('$' + (Math.random() * 0xFFFFFF << 0).toString(16));
   const log = new Logger<L>(label as string, options) as LoggerCompiled<L>;
   loggers.add(label as string, log);
   return log;
@@ -66,8 +67,8 @@ const extended = {
   createModifier,
   transforms,
   combine,
-  ConsoleTransport, 
-  FileTransport, 
+  ConsoleTransport,
+  FileTransport,
   Transport
 };
 

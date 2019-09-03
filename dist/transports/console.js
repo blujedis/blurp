@@ -19,14 +19,15 @@ class ConsoleTransport extends transport_1.Transport {
      * @param level the level of the log message.
      */
     dispatcher(level) {
+        const eol = this.options.eol;
         if (this.options.stream)
-            return { write: (message) => this.options.stream.write(message + this.options.eol) };
+            return { write: (message) => this.options.stream.write(message + eol) };
         // If not included in error levels use stdout or console.log.
         if (level === 'log' || !this.options.errorLevels.includes(level))
-            return utils_1.wrapStream(console._stdout, console.log, this.options.eol);
+            return utils_1.wrapStream(console._stdout, console.log, eol);
         // if error or warn use for fallback
         const fallbackConsole = ['error', 'warn'].includes(level) ? console[level] : console.log;
-        return utils_1.wrapStream(console._stderr, fallbackConsole, this.options.eol);
+        return utils_1.wrapStream(console._stderr, fallbackConsole, eol);
     }
     /**
      * Log handler that receives payload when Transport writes to stream.
@@ -38,7 +39,10 @@ class ConsoleTransport extends transport_1.Transport {
     log(payload, cb) {
         setImmediate(() => this.emit('payload', payload));
         const { [types_1.SOURCE]: source, [types_1.OUTPUT]: output } = payload;
-        this.dispatcher(source.level).write(output);
+        if (source.level === 'write' || source.level === 'writeLn')
+            process.stdout.write(output);
+        else
+            this.dispatcher(source.level).write(output);
         cb();
     }
 }

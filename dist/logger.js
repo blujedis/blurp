@@ -60,7 +60,8 @@ class Logger extends base_1.Base {
                 return cb();
             // No Transports can't do anything.
             if (!this.stream._readableState.pipes) {
-                console.warn(`${os_1.EOL}Logger ${this.label} failed using Transports of undefined${os_1.EOL}${os_1.EOL}Payload:${os_1.EOL} %O${os_1.EOL}`, payload);
+                const _a = types_1.CONFIG, c = payload[_a], _b = types_1.SOURCE, s = payload[_b], _c = types_1.OUTPUT, o = payload[_c], clean = __rest(payload, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
+                console.warn(`${os_1.EOL}Logger ${this.label} failed using Transports of undefined${os_1.EOL}${os_1.EOL}Payload:${os_1.EOL} %O${os_1.EOL}`, clean);
                 return cb(null);
             }
             try {
@@ -224,6 +225,13 @@ class Logger extends base_1.Base {
     get levels() {
         return this.options.levels;
     }
+    set level(level) {
+        if (!this.options.levels.includes(level)) {
+            this.console.warn(`Level "${level} ignored, valid levels [${this.options.levels.join(', ')}]`);
+            return;
+        }
+        this.options.level = level;
+    }
     get index() {
         if (this.options.level === 'log')
             return -1;
@@ -269,6 +277,8 @@ class Logger extends base_1.Base {
             this.muted = true;
             return this;
         }
+        if (child[0] === '*')
+            child = [...this.children.keys()];
         this.children.toArray().forEach(c => child.includes(c.label) && c.mute());
         return this;
     }
@@ -282,6 +292,8 @@ class Logger extends base_1.Base {
             this.muted = false;
             return this;
         }
+        if (child[0] === '*')
+            child = [...this.children.keys()];
         this.children.toArray().forEach(c => child.includes(c.label) && c.unmute());
         return this;
     }
@@ -339,8 +351,13 @@ class Logger extends base_1.Base {
      * @param message the message to be written to the stream.
      * @param cb callback on stream finished writing.
      */
-    write(message, cb) {
-        this.stream.write(this.stingify(message), cb);
+    write(message, cb = utils_1.noop) {
+        message = this.stingify(message);
+        const payload = {
+            level: 'write',
+            message
+        };
+        this.stream.write(this.extendPayload(payload), cb);
         return this;
     }
     /**
@@ -349,8 +366,13 @@ class Logger extends base_1.Base {
      * @param message the message to be written to the stream.
      * @param cb callback on stream finished writing.
      */
-    writeLn(message, cb) {
-        this.stream.write(this.stingify(message) + os_1.EOL, cb);
+    writeLn(message, cb = utils_1.noop) {
+        message = this.stingify(message) + os_1.EOL;
+        const payload = {
+            level: 'writeLn',
+            message
+        };
+        this.stream.write(this.extendPayload(payload), cb);
         return this;
     }
     /**

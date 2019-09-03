@@ -7,6 +7,10 @@ export class TransportStore<L extends string>  {
 
   private store = new Map<string, TransportExt<L>>();
 
+  keys() {
+    return this.store.keys();
+  }
+
   values() {
     return this.store.values();
   }

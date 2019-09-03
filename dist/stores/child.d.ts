@@ -2,6 +2,7 @@ import { Logger } from '../logger';
 import { Callback } from '../types';
 export declare class ChildStore<L extends string> {
     private store;
+    keys(): IterableIterator<string>;
     values(): IterableIterator<Logger<L>>;
     has(key: string): boolean;
     clear(): this;

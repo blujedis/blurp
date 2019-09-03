@@ -1,11 +1,14 @@
 import { Base } from '../base';
 import { Writable, Readable } from 'readable-stream';
-import { ITransportOptions, IPayload, SOURCE, ITransformResult, 
+import {
+  ITransportOptions, IPayload, SOURCE, ITransformResult,
   CONFIG, TransportWritable, Callback,
-  ITransport} from '../types';
+  ITransport,
+  OUTPUT
+} from '../types';
 import { Logger } from '../logger';
 import { combine } from '../create';
-import { noop, logger } from '../utils';
+import { noop, ensureArray } from '../utils';
 
 export abstract class Transport
   <L extends string, O extends ITransportOptions<L>> extends Base<L, O> implements ITransport<L> {
@@ -68,6 +71,11 @@ export abstract class Transport
     // @ts-ignore
     payload[CONFIG].transform = this.label;
 
+    if (payload.level === 'write' || payload.level === 'writeLn') {
+      payload[OUTPUT] = payload.message;
+      return this.log(payload, cb);
+    }
+
     // If no transformer just return the payload.
     if (!this.transformer)
       return this.log(payload, cb);
@@ -109,11 +117,13 @@ export abstract class Transport
     // Check if logv is defined.
     // @ts-ignore
     if (this.logv) {
+
       const _payloads = payloads.filter(chunk => this.accept, this).map(p => p.chunk);
       if (!_payloads.length)
         return cb(null);
-        // @ts-ignore
+      // @ts-ignore
       return this.logv(_payloads, cb);
+
     }
 
     for (const obj of payloads) {
@@ -142,15 +152,20 @@ export abstract class Transport
       }
 
       if (tErr || result.errors.length) {
+
         obj.callback();
+
         if (tErr) {
           cb(null);
           throw tErr;
         }
+
       }
+
       else {
         return this.log(result.payload, obj.callback);
       }
+
     }
 
     return cb(null);
@@ -163,6 +178,14 @@ export abstract class Transport
     return this.options.level || this.logger.level;
   }
 
+  set level(level: L) {
+    if (!this.levels.includes(level)) {
+      this.console.warn(`Level "${level} ignored, valid levels [${this.levels.join(', ')}]`);
+      return;
+    }
+    this.options.level = level;
+  }
+
   get levels() {
     return this.logger.levels;
   }
@@ -173,17 +196,13 @@ export abstract class Transport
     return this.levels.indexOf(this.level);
   }
 
-  protected get console() {
-    return logger;
-  }
-
   /**
    * Compiles Transforms into single Transformer function.
    */
   protected compile() {
-    const transforms = (this.options.transforms || []).length ?
-      this.options.transforms :
-      (this.logger && this.logger.get('transforms')) || [];
+    const _transforms = ensureArray(this.options.transforms);
+    const transforms = (_transforms || []).length ? _transforms :
+      (this.logger && ensureArray(this.logger.get('transforms')) || []);
     if (transforms.length)
       this.transformer = combine(...transforms);
     return this;
@@ -229,6 +248,9 @@ export abstract class Transport
     const payload = obj.chunk || obj;
 
     const { level, err } = payload[SOURCE];
+
+    if (level === 'write' || level === 'writeLn')
+      return true;
 
     // If muted, invalid level or is exception reject.
     // exceptions handled directly by Exception stream.

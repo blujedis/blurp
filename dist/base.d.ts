@@ -3,7 +3,7 @@ import { ITransportOptions, TransformResultCallback, TransformStackCallback } fr
 import { EventEmitter } from 'events';
 export declare abstract class Base<L extends string, O extends ITransportOptions<L>> extends EventEmitter {
     label: string;
-    protected options?: O;
+    protected options: O;
     protected muted: boolean;
     transformer: TransformStackCallback<L>;
     constructor(label: string, options?: O);
@@ -11,6 +11,11 @@ export declare abstract class Base<L extends string, O extends ITransportOptions
      * Compiles Transforms and Formats into compiled function.
      */
     protected compile(): this;
+    protected readonly console: {
+        log: (message: any, ...args: any[]) => any;
+        error: (message: any) => any;
+        warn: (message: any) => any;
+    };
     readonly level: L;
     /**
      * Gets all options.

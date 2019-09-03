@@ -1,3 +1,4 @@
+/// <reference types="lodash" />
 import camelcase from 'camelcase';
 import { IPayload } from '../../types';
 declare const caseMap: {
@@ -9,7 +10,7 @@ declare const caseMap: {
     uppercase: (v: string) => string;
     camel: (v: string) => string;
     camelcase: {
-        (input: string | readonly string[], options?: camelcase.Options): string;
+        (input: import("lodash").Many<string>, options?: camelcase.Options): string;
         default: any;
     };
     pascal: (v: string) => any;

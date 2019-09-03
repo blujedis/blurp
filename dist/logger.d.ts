@@ -44,6 +44,7 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
      */
     private createPayload;
     readonly levels: L[];
+    level: L;
     readonly index: number;
     /**
      * Returns current piped Transports.
@@ -118,14 +119,14 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
      * @param message the message to be written to the stream.
      * @param cb callback on stream finished writing.
      */
-    write(message: any, cb: Callback): this;
+    write(message: any, cb?: Callback): this;
     /**
      * Writes directly to stream WITH line ending.
      *
      * @param message the message to be written to the stream.
      * @param cb callback on stream finished writing.
      */
-    writeLn(message: any, cb: Callback): this;
+    writeLn(message: any, cb?: Callback): this;
     /**
      * Enables profiling of a Logger by id with elapsed times.
      *

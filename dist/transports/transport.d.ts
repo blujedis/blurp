@@ -23,14 +23,9 @@ export declare abstract class Transport<L extends string, O extends ITransportOp
      * @param cb the callback on completed to continue stream.
      */
     private _writev;
-    readonly level: L;
+    level: L;
     readonly levels: L[];
     readonly index: number;
-    protected readonly console: {
-        log: (message: any, ...args: any[]) => any;
-        error: (message: any) => any;
-        warn: (message: any) => any;
-    };
     /**
      * Compiles Transforms into single Transformer function.
      */

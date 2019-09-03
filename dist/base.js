@@ -3,13 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("./constants");
 const create_1 = require("./create");
 const events_1 = require("events");
+const utils_1 = require("./utils");
 class Base extends events_1.EventEmitter {
-    constructor(label, options) {
+    constructor(label, options = {}) {
         super();
         this.label = label;
         this.options = options;
         this.muted = false;
         this.setMaxListeners(10);
+        options.transforms = utils_1.ensureArray(options.transforms);
         this.options = Object.assign({}, constants_1.TRANSPORT_DEFAULTS, options);
         // Compile Transformer.
         this.compile();
@@ -20,8 +22,11 @@ class Base extends events_1.EventEmitter {
     compile() {
         if (!this.options.transforms || !this.options.transforms.length)
             return;
-        this.transformer = create_1.combine(...this.options.transforms);
+        this.transformer = create_1.combine(...utils_1.ensureArray(this.options.transforms));
         return this;
+    }
+    get console() {
+        return utils_1.logger;
     }
     // GETTERS //
     get level() {
@@ -33,7 +38,7 @@ class Base extends events_1.EventEmitter {
         return this.options[key];
     }
     transform(...transforms) {
-        this.options.transforms = [...this.options.transforms, ...transforms];
+        this.options.transforms = [...utils_1.ensureArray(this.options.transforms), ...transforms];
         this.compile();
         return this;
     }

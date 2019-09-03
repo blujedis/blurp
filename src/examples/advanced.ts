@@ -9,8 +9,8 @@ const logger = blurp.createLogger('app', {
     new blurp.ConsoleTransport(),
     new blurp.FileTransport({
       level: 'error',
-      exceptions: true,
-      rejections: true,
+      exceptions: true,     // have this transport handle exceptions.
+      rejections: true,     // have this transport handle rejections.
       onRotate: ((oldFile, newFile) => {
         // do something like gzip/archive old file etc.
       })

@@ -23,6 +23,8 @@ By default the following log levels are enabled:
 ```ts
 import blurp from 'blurp';
 blurp.log('hello blurp');
+blurp.log('My name is %s', 'Milton', { phone: '5551212', age: 55 });
+blurp.error(new Error(`Some error`));
 ```
 
 ## Loggers
@@ -73,6 +75,28 @@ child.warn('My name is %s', 'John', { age: 33 });
   age: 33, 
   module: "user"
 }
+```
+
+### Muting Loggers
+
+You can easily mute a Logger or it's child Loggers.
+
+```ts
+blurp.mute();
+blurp.unmute();
+// OR
+blurp.mute('some-child', 'another-child');
+// OR
+blurp.unmute('*') // unmutes all children.
+```
+
+### Write Directly to Stream
+
+You can also bypass transforms and write directly to your stream.
+
+```ts
+blurp.write('some string without line ending');
+blrup.writeLn('some string with a line ending');
 ```
 
 ## Transports

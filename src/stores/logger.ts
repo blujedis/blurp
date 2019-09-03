@@ -5,6 +5,10 @@ export class LoggerStore {
 
   private store = new Map<string, Logger<any>>();
 
+  keys() {
+    return this.store.keys();
+  }
+
   values() {
     return this.store.values();
   }

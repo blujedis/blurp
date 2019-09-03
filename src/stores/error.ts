@@ -5,6 +5,10 @@ export class ErrorStore<L extends string> {
 
   private store = new Map<Transport<L, any>, ExceptionStream<L>>();
 
+  keys() {
+    return this.store.keys();
+  }
+
   values() {
     return this.store.values();
   }

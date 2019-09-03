@@ -77,7 +77,7 @@ export interface ITransportFirehoseOptions {
 }
 export interface ITransportBaseOptions<L extends string> {
     level?: L;
-    transforms?: Array<TransformResultCallback<L>>;
+    transforms?: TransformResultCallback<L> | Array<TransformResultCallback<L>>;
     transform?: boolean;
 }
 export interface ITransportOptions<L extends string> extends ITransportBaseOptions<L> {

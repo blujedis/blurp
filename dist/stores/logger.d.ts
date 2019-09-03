@@ -2,6 +2,7 @@ import { Logger } from '../logger';
 import { Callback } from '../types';
 export declare class LoggerStore {
     private store;
+    keys(): IterableIterator<string>;
     values(): IterableIterator<Logger<any>>;
     has(key: string): boolean;
     clear(): this;

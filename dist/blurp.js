@@ -12,7 +12,8 @@ function createLogger(label, options) {
         options = label;
         label = undefined;
     }
-    label = label || Date.now() + '';
+    // Random string good collide I guess but unlikely good enough for here.
+    label = label || ('$' + (Math.random() * 0xFFFFFF << 0).toString(16));
     const log = new logger_1.Logger(label, options);
     loggers.add(label, log);
     return log;

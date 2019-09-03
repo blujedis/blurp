@@ -4,6 +4,9 @@ class ErrorStore {
     constructor() {
         this.store = new Map();
     }
+    keys() {
+        return this.store.keys();
+    }
     values() {
         return this.store.values();
     }

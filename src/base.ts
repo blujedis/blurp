@@ -2,16 +2,19 @@ import { ITransportOptions, TransformResultCallback, TransformStackCallback } fr
 import { TRANSPORT_DEFAULTS } from './constants';
 import { combine } from './create';
 import { EventEmitter } from 'events';
+import { ensureArray, logger } from './utils';
 
 export abstract class Base<L extends string, O extends ITransportOptions<L>> extends EventEmitter {
 
   protected muted = false;
   transformer: TransformStackCallback<L>;
 
-  constructor(public label: string, protected options?: O) {
+  constructor(public label: string, protected options: O = {} as O) {
 
     super();
     this.setMaxListeners(10);
+
+    options.transforms = ensureArray(options.transforms);
 
     this.options = { ...TRANSPORT_DEFAULTS as O, ...options };
 
@@ -26,8 +29,12 @@ export abstract class Base<L extends string, O extends ITransportOptions<L>> ext
   protected compile() {
     if (!this.options.transforms || !this.options.transforms.length)
       return;
-    this.transformer = combine(...this.options.transforms);
+    this.transformer = combine(...ensureArray(this.options.transforms));
     return this;
+  }
+
+  protected get console() {
+    return logger;
   }
 
   // GETTERS //
@@ -72,7 +79,7 @@ export abstract class Base<L extends string, O extends ITransportOptions<L>> ext
    */
   transform(...transforms: Array<TransformResultCallback<L>>): this;
   transform(...transforms: Array<TransformResultCallback<L>>) {
-    this.options.transforms = [...this.options.transforms, ...transforms];
+    this.options.transforms = [...ensureArray(this.options.transforms), ...transforms];
     this.compile();
     return this;
   }
