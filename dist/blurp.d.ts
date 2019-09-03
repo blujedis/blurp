@@ -1,7 +1,14 @@
 import { ILoggerOptions, DefaultLevels, LoggerCompiled } from './types';
 import { combine, createFormatter, createModifier } from './create';
 import { LoggerStore } from './stores';
+import { ConsoleTransport, FileTransport, Transport } from './transports';
 import { Logger } from './logger';
+/**
+ * Creates a new Blurp Logger.
+ *
+ * @param options the Logger's options.
+ */
+declare function createLogger<L extends string = DefaultLevels>(options?: ILoggerOptions<L>): LoggerCompiled<L>;
 /**
  * Creates a new Blurp Logger.
  *
@@ -221,5 +228,8 @@ declare const blurp: Logger<DefaultLevels> & import("./types").LoggerMethods<Def
         };
     };
     combine: typeof combine;
+    ConsoleTransport: typeof ConsoleTransport;
+    FileTransport: typeof FileTransport;
+    Transport: typeof Transport;
 };
 export default blurp;

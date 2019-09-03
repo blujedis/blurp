@@ -7,13 +7,12 @@ const transports_1 = require("./transports");
 const logger_1 = require("./logger");
 const utils_1 = require("./utils");
 const loggers = new stores_1.LoggerStore();
-/**
- * Creates a new Blurp Logger.
- *
- * @param label the label or name of the Logger.
- * @param options the Logger's options.
- */
 function createLogger(label, options) {
+    if (typeof label === 'object') {
+        options = label;
+        label = undefined;
+    }
+    label = label || Date.now() + '';
     const log = new logger_1.Logger(label, options);
     loggers.add(label, log);
     return log;
@@ -45,7 +44,10 @@ const extended = {
     createFormatter: create_1.createFormatter,
     createModifier: create_1.createModifier,
     transforms: transforms_1.transforms,
-    combine: create_1.combine
+    combine: create_1.combine,
+    ConsoleTransport: transports_1.ConsoleTransport,
+    FileTransport: transports_1.FileTransport,
+    Transport: transports_1.Transport
 };
 // Merge instance with helpers.
 const blurp = utils_1.extend(logger, extended);

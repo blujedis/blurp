@@ -5,3 +5,4 @@ logs
 node_modules
 temp.js
 dist/debug
+benchmark

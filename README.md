@@ -35,11 +35,14 @@ The below will create a Logger labled **"syslog"** using standard syslog levels.
 
 ```ts
 import blurp, { transforms } from 'blurp';
+// OR ES5
+const blurp = require('blurp').default;
+
 const syslog = blurp.createLogger('express', {
   level: 'warning',
   levels: ['emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug'],
   transports: [
-    new ConsoleTransport()
+    new blurp.ConsoleTransport()
   ],
   transforms: [
     transforms.stack.console()

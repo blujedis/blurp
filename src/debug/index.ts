@@ -1,4 +1,4 @@
-import blurp, { Transport } from '../';
+import blurp from '../';
 
 const transport = blurp.transports.get('console');
 

@@ -2,7 +2,7 @@ import { ILoggerOptions, DefaultLevels, LoggerCompiled } from './types';
 import { transforms } from './transforms';
 import { combine, createFormatter, createModifier } from './create';
 import { LoggerStore } from './stores';
-import { ConsoleTransport, FileTransport } from './transports';
+import { ConsoleTransport, FileTransport, Transport } from './transports';
 import { Logger } from './logger';
 import { extend } from './utils';
 
@@ -11,12 +11,28 @@ const loggers = new LoggerStore();
 /**
  * Creates a new Blurp Logger.
  * 
+ * @param options the Logger's options.
+ */
+function createLogger<L extends string = DefaultLevels>(options?: ILoggerOptions<L>): LoggerCompiled<L>;
+
+/**
+ * Creates a new Blurp Logger.
+ * 
  * @param label the label or name of the Logger.
  * @param options the Logger's options.
  */
-function createLogger<L extends string = DefaultLevels>(label: string, options?: ILoggerOptions<L>): LoggerCompiled<L> {
-  const log = new Logger<L>(label, options) as LoggerCompiled<L>;
-  loggers.add(label, log);
+function createLogger<L extends string = DefaultLevels>(
+  label: string, options?: ILoggerOptions<L>): LoggerCompiled<L>;
+function createLogger<L extends string = DefaultLevels>(
+  label: string | ILoggerOptions<L>,
+  options?: ILoggerOptions<L>): LoggerCompiled<L> {
+  if (typeof label === 'object') {
+    options = label;
+    label = undefined;
+  }
+  label = label || Date.now() + '';
+  const log = new Logger<L>(label as string, options) as LoggerCompiled<L>;
+  loggers.add(label as string, log);
   return log;
 }
 
@@ -49,7 +65,10 @@ const extended = {
   createFormatter,
   createModifier,
   transforms,
-  combine
+  combine,
+  ConsoleTransport, 
+  FileTransport, 
+  Transport
 };
 
 // Merge instance with helpers.
