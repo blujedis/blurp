@@ -18,6 +18,7 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
     constructor(label: string, options?: ILoggerOptions<L>);
     private initStream;
     private init;
+    private bindLevels;
     private onEvent;
     /**
      * Simple method to ensure string, used with .write() & .writeLn();

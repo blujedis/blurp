@@ -391,13 +391,15 @@ const logger = {
 
 };
 
+type InternalLogger = { [K in keyof typeof logger]: (message: any, ...args: any[]) => InternalLogger };
+
 /**
  * Simple internal logger.
  * 
  * @param message the message to be logged.
  * @param args the format arguments if any.
  */
-function _logger(type: 'error' | 'warn' | null, message: any, ...args: any[]) {
+function _logger(type: 'error' | 'warn' | null, message: any, ...args: any[]): InternalLogger {
   const writer = !type ?
     wrapStream(console._stdout, console.log) :
     wrapStream(console._stderr, console[type] || console.error);
@@ -407,4 +409,4 @@ function _logger(type: 'error' | 'warn' | null, message: any, ...args: any[]) {
 
 Array.prototype.$reduceBreak = reduceBreak;
 
-export { getProps, toArrayValues, logger };
+export { getProps, toArrayValues, logger, InternalLogger };

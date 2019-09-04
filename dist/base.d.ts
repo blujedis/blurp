@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { ITransportOptions, TransformResultCallback, TransformStackCallback } from './types';
 import { EventEmitter } from 'events';
+import { InternalLogger } from './utils';
 export declare abstract class Base<L extends string, O extends ITransportOptions<L>> extends EventEmitter {
     label: string;
     protected options: O;
@@ -11,11 +12,7 @@ export declare abstract class Base<L extends string, O extends ITransportOptions
      * Compiles Transforms and Formats into compiled function.
      */
     protected compile(): this;
-    protected readonly console: {
-        log: (message: any, ...args: any[]) => any;
-        error: (message: any) => any;
-        warn: (message: any) => any;
-    };
+    protected readonly console: InternalLogger;
     readonly level: L;
     /**
      * Gets all options.

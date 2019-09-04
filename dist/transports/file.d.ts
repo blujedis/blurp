@@ -55,7 +55,7 @@ export declare class FileTransport<L extends string> extends Transport<L, IFileT
      * Queries a
      * @param options options to apply to query logs.
      */
-    query(options: Query<L> | IQueryOptions<L>): import("fs").ReadStream | Query<L, IQueryOptions<L>>;
+    query(options: Query<L> | IQueryOptions<L>): Query<L, IQueryOptions<L>> | import("fs").ReadStream;
     /**
      * Enables connection to Logger for streaming events to firehose.
      *

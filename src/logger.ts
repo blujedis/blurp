@@ -73,7 +73,7 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
       // No Transports can't do anything.
       if (!this.stream._readableState.pipes) {
         const { [CONFIG]: c, [SOURCE]: s, [OUTPUT]: o, ...clean } = payload;
-        console.warn(
+        this.console.warn(
           `${EOL}Logger ${this.label} failed using Transports of undefined${EOL}${EOL}Payload:${EOL} %O${EOL}`, clean
         );
         return cb(null);
@@ -116,17 +116,22 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
     this.initStream();
 
     // Bind log levels.
-    for (const level of this.levels) {
-      this[level as string] = (msg: string | Error, ...meta: any[]) => {
-        return this.log(level, msg, ...meta);
-      };
-    }
+    this.bindLevels(this.options.levels);
 
     // Add the transports.
     ensureArray(this.options.transports)
       .forEach((t) => this.transport(t));
 
     return this;
+
+  }
+
+  private bindLevels(levels: L[]) {
+    for (const level of levels) {
+      this[level as string] = (msg: string | Error, ...meta: any[]) => {
+        return this.log(level, msg, ...meta);
+      };
+    }
 
   }
 
@@ -188,7 +193,6 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
       cb
     };
   }
-
 
   /**
    * Creates the payload for stream.
@@ -395,6 +399,7 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
       return child;
     const parent = this;
     child = Object.create(parent);
+    child.label = label;
     child.stream = Object.create(child.stream, {
       write: {
         value(chunk, cb) {
@@ -404,7 +409,9 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
         }
       }
     });
-    child.label = label;
+    // Need to rebind our level methods to maintain context.
+    // Bind log levels.
+    child.bindLevels(child.options.levels);
     this.children.add(label, child, this);
     return child;
   }

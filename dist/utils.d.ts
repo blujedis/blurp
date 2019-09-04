@@ -172,8 +172,11 @@ export declare function wrapStream(stream: NodeJS.WritableStream, fallback: (mes
     write(msg: any): boolean;
 };
 declare const logger: {
-    log: (message: any, ...args: any[]) => any;
-    error: (message: any) => any;
-    warn: (message: any) => any;
+    log: (message: any, ...args: any[]) => InternalLogger;
+    error: (message: any) => InternalLogger;
+    warn: (message: any) => InternalLogger;
 };
-export { getProps, toArrayValues, logger };
+declare type InternalLogger = {
+    [K in keyof typeof logger]: (message: any, ...args: any[]) => InternalLogger;
+};
+export { getProps, toArrayValues, logger, InternalLogger };

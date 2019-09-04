@@ -61,7 +61,7 @@ class Logger extends base_1.Base {
             // No Transports can't do anything.
             if (!this.stream._readableState.pipes) {
                 const _a = types_1.CONFIG, c = payload[_a], _b = types_1.SOURCE, s = payload[_b], _c = types_1.OUTPUT, o = payload[_c], clean = __rest(payload, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
-                console.warn(`${os_1.EOL}Logger ${this.label} failed using Transports of undefined${os_1.EOL}${os_1.EOL}Payload:${os_1.EOL} %O${os_1.EOL}`, clean);
+                this.console.warn(`${os_1.EOL}Logger ${this.label} failed using Transports of undefined${os_1.EOL}${os_1.EOL}Payload:${os_1.EOL} %O${os_1.EOL}`, clean);
                 return cb(null);
             }
             try {
@@ -90,15 +90,18 @@ class Logger extends base_1.Base {
         // Initialize the Transform stream.
         this.initStream();
         // Bind log levels.
-        for (const level of this.levels) {
-            this[level] = (msg, ...meta) => {
-                return this.log(level, msg, ...meta);
-            };
-        }
+        this.bindLevels(this.options.levels);
         // Add the transports.
         utils_1.ensureArray(this.options.transports)
             .forEach((t) => this.transport(t));
         return this;
+    }
+    bindLevels(levels) {
+        for (const level of levels) {
+            this[level] = (msg, ...meta) => {
+                return this.log(level, msg, ...meta);
+            };
+        }
     }
     onEvent(event, transport) {
         const eventWrapper = (err) => {
@@ -314,6 +317,7 @@ class Logger extends base_1.Base {
             return child;
         const parent = this;
         child = Object.create(parent);
+        child.label = label;
         child.stream = Object.create(child.stream, {
             write: {
                 value(chunk, cb) {
@@ -323,7 +327,9 @@ class Logger extends base_1.Base {
                 }
             }
         });
-        child.label = label;
+        // Need to rebind our level methods to maintain context.
+        // Bind log levels.
+        child.bindLevels(child.options.levels);
         this.children.add(label, child, this);
         return child;
     }

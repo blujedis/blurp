@@ -2,7 +2,7 @@ import { ITransportOptions, TransformResultCallback, TransformStackCallback } fr
 import { TRANSPORT_DEFAULTS } from './constants';
 import { combine } from './create';
 import { EventEmitter } from 'events';
-import { ensureArray, logger } from './utils';
+import { ensureArray, logger, InternalLogger} from './utils';
 
 export abstract class Base<L extends string, O extends ITransportOptions<L>> extends EventEmitter {
 
@@ -33,7 +33,7 @@ export abstract class Base<L extends string, O extends ITransportOptions<L>> ext
     return this;
   }
 
-  protected get console() {
+  protected get console(): InternalLogger {
     return logger;
   }
 
