@@ -131,7 +131,7 @@ class Transport extends base_1.Base {
         return this.logger.levels;
     }
     get index() {
-        if (this.level === 'log')
+        if (['log', 'write', 'writeLn'].includes(this.level))
             return -1;
         return this.levels.indexOf(this.level);
     }
@@ -152,6 +152,8 @@ class Transport extends base_1.Base {
      * @param level the level to get index for.
      */
     getIndex(level) {
+        if (['log', 'write', 'writeLn'].includes(this.level))
+            return -1;
         return this.levels.indexOf(level);
     }
     /**
@@ -181,8 +183,6 @@ class Transport extends base_1.Base {
     accept(obj) {
         const payload = obj.chunk || obj;
         const { level, err } = payload[types_1.SOURCE];
-        if (level === 'write' || level === 'writeLn')
-            return true;
         // If muted, invalid level or is exception reject.
         // exceptions handled directly by Exception stream.
         if (this.muted || !this.isActiveLevel(level, this.level) ||

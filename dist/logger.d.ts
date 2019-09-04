@@ -1,5 +1,5 @@
 import { Base } from './base';
-import { ILoggerOptions, LoggerTransform, IPayload, ILogMessage, MessageType, ITransportOptions, Callback, ITransportFirehoseOptions } from './types';
+import { ILoggerOptions, LoggerTransform, IPayload, ILogMessage, MessageType, ITransportOptions, Callback, ITransportFirehoseOptions, LoggerCompiled } from './types';
 import { ChildStore, TransportStore } from './stores';
 import { ExceptionHandler, RejectionHandler } from './errors';
 import { Stream } from 'readable-stream';
@@ -75,7 +75,7 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
      */
     child(label: string, meta?: {
         [key: string]: any;
-    }): Logger<L>;
+    }): LoggerCompiled<L>;
     /**
      * Gets a Transport by name.
      *

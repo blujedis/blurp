@@ -191,7 +191,7 @@ export abstract class Transport
   }
 
   get index() {
-    if (this.level === 'log')
+    if (['log', 'write', 'writeLn'].includes(this.level))
       return -1;
     return this.levels.indexOf(this.level);
   }
@@ -214,6 +214,8 @@ export abstract class Transport
    * @param level the level to get index for.
    */
   getIndex(level: L) {
+    if (['log', 'write', 'writeLn'].includes(this.level))
+      return -1;
     return this.levels.indexOf(level);
   }
 
@@ -248,9 +250,6 @@ export abstract class Transport
     const payload = obj.chunk || obj;
 
     const { level, err } = payload[SOURCE];
-
-    if (level === 'write' || level === 'writeLn')
-      return true;
 
     // If muted, invalid level or is exception reject.
     // exceptions handled directly by Exception stream.

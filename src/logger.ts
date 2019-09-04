@@ -290,6 +290,10 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
     return this.options.levels;
   }
 
+  get level() {
+    return this.options.level;
+  }
+
   set level(level: L) {
     if (!this.options.levels.includes(level)) {
       this.console.warn(`Level "${level} ignored, valid levels [${this.options.levels.join(', ')}]`);

@@ -225,6 +225,9 @@ class Logger extends base_1.Base {
     get levels() {
         return this.options.levels;
     }
+    get level() {
+        return this.options.level;
+    }
     set level(level) {
         if (!this.options.levels.includes(level)) {
             this.console.warn(`Level "${level} ignored, valid levels [${this.options.levels.join(', ')}]`);

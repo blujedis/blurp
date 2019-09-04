@@ -8,4 +8,4 @@ const transport = blurp.transports.get('console');
 
 blurp.warn('My name is %s', 'John', { age: 33 });
 
-blurp.write('just some text.');
+// blurp.write('just some text.');
