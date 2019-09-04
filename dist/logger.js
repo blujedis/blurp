@@ -299,13 +299,18 @@ class Logger extends base_1.Base {
     }
     // CHILDREN //
     /**
-     * Adds a child Logger to the current Logger.
+     * Gets or Adds a child Logger to the current Logger.
      *
      * @param child the child Logger to be added.
      */
     child(label, meta) {
+        let child;
+        if (!meta)
+            child = this.children.get(label);
+        if (child)
+            return child;
         const parent = this;
-        const child = Object.create(parent);
+        child = Object.create(parent);
         child.stream = Object.create(child.stream, {
             write: {
                 value(chunk, cb) {

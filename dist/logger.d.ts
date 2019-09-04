@@ -69,11 +69,11 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
      */
     unmute(...child: string[]): this;
     /**
-     * Adds a child Logger to the current Logger.
+     * Gets or Adds a child Logger to the current Logger.
      *
      * @param child the child Logger to be added.
      */
-    child(label: string, meta: {
+    child(label: string, meta?: {
         [key: string]: any;
     }): Logger<L>;
     /**

@@ -2,7 +2,7 @@ import { Base } from './base';
 import {
   ILoggerOptions, Colors, LoggerTransform, IPayload,
   ILogMessage, SOURCE, CONFIG, ErrorExt, MessageType, ITransportOptions,
-  Callback, ITransportFirehoseOptions, OUTPUT
+  Callback, ITransportFirehoseOptions, OUTPUT, LoggerCompiled
 } from './types';
 import { DEFAULT_LEVELS, DEFAULT_COLORS, PAYLOAD_DEFAULTS, FORMAT_EXP } from './constants';
 import { noop, ensureArray } from './utils';
@@ -378,13 +378,18 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
   // CHILDREN //
 
   /**
-   * Adds a child Logger to the current Logger.
+   * Gets or Adds a child Logger to the current Logger.
    * 
    * @param child the child Logger to be added.
    */
-  child(label: string, meta: { [key: string]: any }) {
+  child(label: string, meta?: { [key: string]: any }) {
+    let child: LoggerCompiled<L>;
+    if (!meta)
+      child = this.children.get(label) as any;
+    if (child)
+      return child;
     const parent = this;
-    const child = Object.create(parent) as Logger<L>;
+    child = Object.create(parent);
     child.stream = Object.create(child.stream, {
       write: {
         value(chunk, cb) {
