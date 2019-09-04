@@ -1,7 +1,7 @@
 import { Kleur } from 'kleur';
 import { Transform, Writable, Stream } from 'readable-stream';
 import { Logger } from './logger';
-import { Transport } from 'transports/transport';
+import { Transport } from './transports';
 import { IQueryOptions } from './query';
 export declare type DefaultLevels = 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
 export declare type Style = keyof Kleur;
