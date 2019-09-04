@@ -69,8 +69,10 @@ export default function fileFormat<L extends string>(payload: IPayload<L>,
 
   addPropsIf('level');
 
-  if (label)
+  if (label) {
+    payload.label = payload[CONFIG].label;
     addPropsIf('label');
+  }
 
   addPropsIf('message', '...');
 

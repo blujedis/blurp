@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const types_1 = require("../../types");
 const meta_1 = __importDefault(require("../modifiers/meta"));
 const delimited_1 = __importDefault(require("../formats/delimited"));
 const errorify_1 = __importDefault(require("../modifiers/errorify"));
@@ -40,8 +41,10 @@ function fileFormat(payload, options) {
         addPropsIf('timestamp');
     }
     addPropsIf('level');
-    if (label)
+    if (label) {
+        payload.label = payload[types_1.CONFIG].label;
         addPropsIf('label');
+    }
     addPropsIf('message', '...');
     if (_meta) {
         payload = meta_1.default(payload, { prop: _meta });

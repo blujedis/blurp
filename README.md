@@ -40,7 +40,15 @@ import blurp, { transforms } from 'blurp';
 // OR ES5
 const blurp = require('blurp').default;
 
-const syslog = blurp.createLogger('express', {
+// NOTE: If using Typescript you'll need to pass in your types.
+// It is possible to have this inferred but you can't pass in Transports
+// or Transforms. You'd need to create the Logger first then add
+// your Transports etc after the fact by doing for ex: syslog.transport(transport1, transport2)
+type Levels = 'emerg' | 'alert' | 'crit' | 'err' | 'warning' | 'notice' | 'info' | 'debug';
+
+// If NOT USING Typescript you don't need "Levels" below.
+
+const syslog = blurp.createLogger<Levels>('express', {
   level: 'warning',
   levels: ['emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug'],
   transports: [
@@ -65,7 +73,7 @@ The above, using the **console()** Transform will output the following:
 Child Loggers are simply Loggers that share all of its parent settings but insert meta data or you might think of them as flags for each logged method.
 
 ```ts
-const child = blurp.child({ module: 'user' });
+const child = blurp.child('mylabel', { module: 'user' });
 child.warn('My name is %s', 'John', { age: 33 });
 // "module" is added as metadata automatically 
 // on each logged message.
