@@ -6,16 +6,11 @@ import { Logger } from './logger';
 /**
  * Creates a new Blurp Logger.
  *
- * @param options the Logger's options.
- */
-declare function createLogger<L extends string = DefaultLevels>(options?: ILoggerOptions<L>): LoggerCompiled<L>;
-/**
- * Creates a new Blurp Logger.
- *
  * @param label the label or name of the Logger.
  * @param options the Logger's options.
+ * @param force allows overwriting existing Loggers.
  */
-declare function createLogger<L extends string = DefaultLevels>(label: string, options?: ILoggerOptions<L>): LoggerCompiled<L>;
+declare function createLogger<L extends string>(label: string, options?: ILoggerOptions<L>, force?: boolean): LoggerCompiled<L>;
 declare const blurp: Logger<DefaultLevels> & import("./types").LoggerMethods<DefaultLevels> & {
     loggers: LoggerStore;
     createLogger: typeof createLogger;

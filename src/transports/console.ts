@@ -1,5 +1,5 @@
 import { Transport } from './transport';
-import { ITransportOptions, SOURCE, OUTPUT, IPayload, Callback, ConsoleLog } from '../types';
+import { ITransportOptions, SOURCE, OUTPUT, IPayload, Callback, DefaultLevels } from '../types';
 import { EOL } from 'os';
 import { logger, capitalize, wrapStream } from '../utils';
 

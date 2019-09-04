@@ -34,14 +34,14 @@ class Logger extends base_1.Base {
         // No levels specified set defaults.
         if (!this.options.levels) {
             this.options.levels = constants_1.DEFAULT_LEVELS;
-            // If colors aren't disabled by null.
-            if (typeof this.options.colors === 'undefined' && this.options.colors !== null)
-                this.options.colors = constants_1.DEFAULT_COLORS;
         }
         else {
             // Clone don't allow overwriting of levels.
             this.options.levels = [...this.options.levels];
         }
+        // If colors aren't disabled by null.
+        if (typeof this.options.colors === 'undefined')
+            this.options.colors = constants_1.DEFAULT_COLORS;
         if (!this.options.levels.length)
             throw new Error(`Cannot init Logger "${label}" using levels of undefined`);
         // If no level specified choose highest level.

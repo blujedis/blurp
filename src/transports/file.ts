@@ -1,7 +1,8 @@
 import { Transport } from './transport';
 import {
   ITransportOptions, OUTPUT, IPayload, Callback,
-  ITransportFirehoseOptions
+  ITransportFirehoseOptions,
+  DefaultLevels
 } from '../types';
 import rotator from 'file-stream-rotator';
 import { EOL } from 'os';

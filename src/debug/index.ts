@@ -1,11 +1,40 @@
 import blurp from '../';
 
-const transport = blurp.transports.get('console');
+const { transforms } = blurp;
 
-// setTimeout(() => {
-//   throw new Error('asdfasdfasdf');
-// }, 100);
+const logger = blurp.createLogger('other', {
 
-blurp.warn('My name is %s', 'John', { age: 33 });
+  transports: [
 
-// blurp.write('just some text.');
+    new blurp.ConsoleTransport({
+
+      transforms: [
+        transforms.stack.console({
+          timestamp: true,
+          level: {
+            pad: true,
+            case: 'upper'
+          },
+          label: true,
+          errorify: 'detailstack'
+        })
+      ]
+
+    }),
+
+    new blurp.FileTransport({
+
+      transforms: [
+        transforms.stack.file({
+          timestamp: true,
+          label: true
+        })
+      ]
+
+    })
+
+  ]
+
+});
+
+logger.error('some warning.')

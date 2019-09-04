@@ -77,7 +77,7 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
   } : options.level;
 
   const colorConf = normalizeConf(colorize, {
-    level: colors[level as L],
+    level: (colors || {} as any)[level as L],
     message: null
   });
 

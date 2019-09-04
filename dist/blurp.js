@@ -7,13 +7,14 @@ const transports_1 = require("./transports");
 const logger_1 = require("./logger");
 const utils_1 = require("./utils");
 const loggers = new stores_1.LoggerStore();
-function createLogger(label, options) {
-    if (typeof label === 'object') {
-        options = label;
-        label = undefined;
-    }
-    // Random string good collide I guess but unlikely good enough for here.
-    label = label || ('$' + (Math.random() * 0xFFFFFF << 0).toString(16));
+/**
+ * Creates a new Blurp Logger.
+ *
+ * @param label the label or name of the Logger.
+ * @param options the Logger's options.
+ * @param force allows overwriting existing Loggers.
+ */
+function createLogger(label, options, force = false) {
     const log = new logger_1.Logger(label, options);
     loggers.add(label, log);
     return log;
@@ -24,17 +25,18 @@ function createLogger(label, options) {
  * @param name the name of the default logger.
  */
 function defaultLogger() {
+    const _transforms = transforms_1.initTransforms();
     return createLogger('default', {
         transports: [
             new transports_1.ConsoleTransport(),
             new transports_1.FileTransport({
                 transforms: [
-                    transforms_1.transforms.stack.file()
+                    _transforms.stack.file()
                 ]
             })
         ],
         transforms: [
-            transforms_1.transforms.stack.terminal()
+            _transforms.stack.terminal()
         ]
     });
 }

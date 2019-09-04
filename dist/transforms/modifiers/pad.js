@@ -19,7 +19,7 @@ function pad(payload, options) {
     const maxLen = Math.max(...levels.map(v => v.length));
     // get map of all paddings.
     const padMap = levels.reduce((a, c) => {
-        const len = maxLen + 1 - c.length;
+        const len = maxLen - c.length;
         const repeat = Math.floor(len / char.length);
         a[c] = `${char}${char.repeat(repeat)}`.slice(0, len);
         return a;

@@ -2,7 +2,7 @@ import { Base } from './base';
 import {
   ILoggerOptions, Colors, LoggerTransform, IPayload,
   ILogMessage, SOURCE, CONFIG, ErrorExt, MessageType, ITransportOptions,
-  Callback, ITransportFirehoseOptions, OUTPUT, LoggerCompiled
+  Callback, ITransportFirehoseOptions, OUTPUT, LoggerCompiled, DefaultLevels
 } from './types';
 import { DEFAULT_LEVELS, DEFAULT_COLORS, PAYLOAD_DEFAULTS, FORMAT_EXP } from './constants';
 import { noop, ensureArray } from './utils';
@@ -34,14 +34,15 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
     // No levels specified set defaults.
     if (!this.options.levels) {
       this.options.levels = DEFAULT_LEVELS as L[];
-      // If colors aren't disabled by null.
-      if (typeof this.options.colors === 'undefined' && this.options.colors !== null)
-        this.options.colors = DEFAULT_COLORS as Colors<L>;
     }
     else {
       // Clone don't allow overwriting of levels.
       this.options.levels = [...this.options.levels];
     }
+
+    // If colors aren't disabled by null.
+    if (typeof this.options.colors === 'undefined')
+      this.options.colors = DEFAULT_COLORS as Colors<L>;
 
     if (!this.options.levels.length)
       throw new Error(`Cannot init Logger "${label}" using levels of undefined`);

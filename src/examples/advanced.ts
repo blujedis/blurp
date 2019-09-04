@@ -1,13 +1,23 @@
+/**
+ * When using Typescript with custom Levels
+ * you need to tell it which Levels you wish to use.
+ * You can also create the logger first then add Transports
+ * to have your Level types inferred.
+ */
+
 import blurp from '../';
+import { initTransforms } from '../transforms';
 
-const { stack } = blurp.transforms;
+type Levels = 'error' | 'warn' | 'info' | 'debug';
 
-const logger = blurp.createLogger('app', {
+const { stack } = initTransforms<Levels>();
+
+const logger = blurp.createLogger<Levels>('app', {
   level: 'info',
   levels: ['error', 'warn', 'info', 'debug'],
   transports: [
-    new blurp.ConsoleTransport(),
-    new blurp.FileTransport({
+    new blurp.ConsoleTransport<Levels>(),
+    new blurp.FileTransport<Levels>({
       level: 'error',
       exceptions: true,     // have this transport handle exceptions.
       rejections: true,     // have this transport handle rejections.

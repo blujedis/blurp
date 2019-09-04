@@ -26,10 +26,10 @@ export class LoggerStore {
     return this.store.get(key);
   }
 
-  add(key: string, logger: Logger<any>) {
+  add(key: string, logger: Logger<any>, force: boolean = false) {
 
-    if (this.store.has(key))
-      throw new Error(`Logger "${key}" already exists, please remove or choose another name`);
+    if (this.store.has(key) && !force)
+      throw new Error(`Logger "${key}" already exists, please choose another name or use "force"`);
 
     // Should never hit here but just in case.
     const levels = logger.get('levels');
@@ -37,6 +37,7 @@ export class LoggerStore {
       throw new Error(`Cannot init Logger "${key}" using levels of undefined`);
 
     return this.store.set(key, logger);
+
   }
 
   remove(key: string, cb?: Callback) {

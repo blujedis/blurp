@@ -30,7 +30,7 @@ export default function pad<L extends string>(payload: IPayload<L>,
   // get map of all paddings.
   const padMap =
     levels.reduce((a, c) => {
-      const len = maxLen + 1 - c.length;
+      const len = maxLen - c.length;
       const repeat = Math.floor(len / char.length);
       a[c as string] = `${char}${char.repeat(repeat)}`.slice(0, len);
       return a;

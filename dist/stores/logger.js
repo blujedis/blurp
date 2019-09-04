@@ -20,9 +20,9 @@ class LoggerStore {
     get(key) {
         return this.store.get(key);
     }
-    add(key, logger) {
-        if (this.store.has(key))
-            throw new Error(`Logger "${key}" already exists, please remove or choose another name`);
+    add(key, logger, force = false) {
+        if (this.store.has(key) && !force)
+            throw new Error(`Logger "${key}" already exists, please choose another name or use "force"`);
         // Should never hit here but just in case.
         const levels = logger.get('levels');
         if (!levels.length)

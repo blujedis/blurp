@@ -44,7 +44,7 @@ function terminalFormat(payload, options) {
         template: '${level}:'
     } : options.level;
     const colorConf = utils_1.normalizeConf(colorize, {
-        level: colors[level],
+        level: (colors || {})[level],
         message: null
     });
     if (extend)

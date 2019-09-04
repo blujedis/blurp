@@ -1,5 +1,5 @@
 import { ILoggerOptions, DefaultLevels, LoggerCompiled } from './types';
-import { transforms } from './transforms';
+import { initTransforms, transforms } from './transforms';
 import { combine, createFormatter, createModifier } from './create';
 import { LoggerStore } from './stores';
 import { ConsoleTransport, FileTransport, Transport } from './transports';
@@ -11,29 +11,15 @@ const loggers = new LoggerStore();
 /**
  * Creates a new Blurp Logger.
  * 
- * @param options the Logger's options.
- */
-function createLogger<L extends string = DefaultLevels>(options?: ILoggerOptions<L>): LoggerCompiled<L>;
-
-/**
- * Creates a new Blurp Logger.
- * 
  * @param label the label or name of the Logger.
  * @param options the Logger's options.
+ * @param force allows overwriting existing Loggers.
  */
-function createLogger<L extends string = DefaultLevels>(
-  label: string, options?: ILoggerOptions<L>): LoggerCompiled<L>;
-function createLogger<L extends string = DefaultLevels>(
-  label: string | ILoggerOptions<L>,
-  options?: ILoggerOptions<L>): LoggerCompiled<L> {
-  if (typeof label === 'object') {
-    options = label;
-    label = undefined;
-  }
-  // Random string good collide I guess but unlikely good enough for here.
- label = label || ('$' + (Math.random() * 0xFFFFFF << 0).toString(16));
+function createLogger<L extends string>(
+  label: string,
+  options?: ILoggerOptions<L>, force: boolean = false): LoggerCompiled<L> {
   const log = new Logger<L>(label as string, options) as LoggerCompiled<L>;
-  loggers.add(label as string, log);
+  loggers.add(label, log);
   return log;
 }
 
@@ -43,19 +29,23 @@ function createLogger<L extends string = DefaultLevels>(
  * @param name the name of the default logger.
  */
 function defaultLogger<L extends string = DefaultLevels>() {
+
+  const _transforms = initTransforms<L>();
+
   return createLogger<L>('default', {
     transports: [
       new ConsoleTransport(),
       new FileTransport({
         transforms: [
-          transforms.stack.file()
+          _transforms.stack.file()
         ]
       })
     ],
     transforms: [
-      transforms.stack.terminal()
+      _transforms.stack.terminal()
     ]
   });
+
 }
 
 const logger = defaultLogger();
