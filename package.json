@@ -1,6 +1,6 @@
 {
   "name": "blurp",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Stream based Logger using Transports.",
   "main": "dist/index.js",
   "scripts": {

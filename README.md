@@ -233,6 +233,38 @@ There are two basic forms of Transforms:
 
 There is a third form of sorts called a **Stack**. Ultimately it is a Format Transform but a stack merely combines multiple modifier and format Transforms to create a singular method for all internally bundled Transforms.
 
+Current built in transforms are listed below. Soon as there is time we'll detail these and their options in the mean time please check source!
+
+#### Modifiers
+
+- align
+- case
+- colorize
+- errorify
+- extend
+- generic
+- label
+- mask
+- meta
+- pad
+- private
+- process
+- sort
+- splat
+- timestamp
+- trace
+
+#### Formats
+
+- delimited
+- json
+- pretty
+
+#### Stacks
+
+- terminal
+- file
+
 ### Modifier Transform
 
 Although there's a built in sort Transform we'll use it to illustrate how simple it is to create it. A modifier Transform does exactly what it sounds like. It modifies the payload object then returns the modified payload object to continue down the stack.
