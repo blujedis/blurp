@@ -11,7 +11,7 @@ import { Logger } from './logger';
  * @param force allows overwriting existing Loggers.
  */
 declare function createLogger<L extends string>(label: string, options?: ILoggerOptions<L>, force?: boolean): LoggerCompiled<L>;
-declare const blurp: Logger<DefaultLevels> & import("./types").LoggerMethods<DefaultLevels> & {
+declare const _default: Logger<DefaultLevels> & import("./types").LoggerMethods<DefaultLevels> & {
     loggers: LoggerStore;
     createLogger: typeof createLogger;
     createFormatter: typeof createFormatter;
@@ -227,4 +227,4 @@ declare const blurp: Logger<DefaultLevels> & import("./types").LoggerMethods<Def
     FileTransport: typeof FileTransport;
     Transport: typeof Transport;
 };
-export default blurp;
+export default _default;

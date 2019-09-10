@@ -19,7 +19,7 @@ function createLogger<L extends string>(
   label: string,
   options?: ILoggerOptions<L>, force: boolean = false): LoggerCompiled<L> {
   const log = new Logger<L>(label as string, options) as LoggerCompiled<L>;
-  loggers.add(label, log);
+  loggers.add(label, log, force);
   return log;
 }
 
@@ -29,6 +29,9 @@ function createLogger<L extends string>(
  * @param name the name of the default logger.
  */
 function defaultLogger<L extends string = DefaultLevels>() {
+
+  if (loggers.has('default'))
+    return loggers.get('default') as LoggerCompiled<L>;
 
   const _transforms = initTransforms<L>();
 
@@ -48,21 +51,23 @@ function defaultLogger<L extends string = DefaultLevels>() {
 
 }
 
-const logger = defaultLogger();
+function init() {
 
-const extended = {
-  loggers,
-  createLogger,
-  createFormatter,
-  createModifier,
-  transforms,
-  combine,
-  ConsoleTransport,
-  FileTransport,
-  Transport
-};
+  const extended = {
+    loggers,
+    createLogger,
+    createFormatter,
+    createModifier,
+    transforms,
+    combine,
+    ConsoleTransport,
+    FileTransport,
+    Transport
+  };
 
-// Merge instance with helpers.
-const blurp = extend(logger, extended);
+  // Merge instance with helpers.
+  return extend(defaultLogger(), extended);
 
-export default blurp;
+}
+
+export default init();

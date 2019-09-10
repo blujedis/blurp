@@ -16,7 +16,7 @@ const loggers = new stores_1.LoggerStore();
  */
 function createLogger(label, options, force = false) {
     const log = new logger_1.Logger(label, options);
-    loggers.add(label, log);
+    loggers.add(label, log, force);
     return log;
 }
 /**
@@ -25,6 +25,8 @@ function createLogger(label, options, force = false) {
  * @param name the name of the default logger.
  */
 function defaultLogger() {
+    if (loggers.has('default'))
+        return loggers.get('default');
     const _transforms = transforms_1.initTransforms();
     return createLogger('default', {
         transports: [
@@ -40,19 +42,20 @@ function defaultLogger() {
         ]
     });
 }
-const logger = defaultLogger();
-const extended = {
-    loggers,
-    createLogger,
-    createFormatter: create_1.createFormatter,
-    createModifier: create_1.createModifier,
-    transforms: transforms_1.transforms,
-    combine: create_1.combine,
-    ConsoleTransport: transports_1.ConsoleTransport,
-    FileTransport: transports_1.FileTransport,
-    Transport: transports_1.Transport
-};
-// Merge instance with helpers.
-const blurp = utils_1.extend(logger, extended);
-exports.default = blurp;
+function init() {
+    const extended = {
+        loggers,
+        createLogger,
+        createFormatter: create_1.createFormatter,
+        createModifier: create_1.createModifier,
+        transforms: transforms_1.transforms,
+        combine: create_1.combine,
+        ConsoleTransport: transports_1.ConsoleTransport,
+        FileTransport: transports_1.FileTransport,
+        Transport: transports_1.Transport
+    };
+    // Merge instance with helpers.
+    return utils_1.extend(defaultLogger(), extended);
+}
+exports.default = init();
 //# sourceMappingURL=blurp.js.map

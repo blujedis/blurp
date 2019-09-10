@@ -128,7 +128,7 @@ class MyTransport extends Transport {
     super('my-transport-name', options);
   }
 
-  log(payload: IPayload<L>, cb: Callback) {
+  log(payload, cb) {
 
   const { [SOURCE]: source, [OUTPUT]: output } = payload;
   console.log(output);
@@ -193,7 +193,7 @@ const payload = {
       debug: 'magenta',
       trace: 'blue'
     },
-    elapsed: 1000
+    elapsed: 21
   }
   [SOURCE]: {
     level: 'info',
