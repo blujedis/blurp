@@ -7,7 +7,6 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc",
     "start": "tsc -w",
-    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,6 +21,12 @@
     "pino",
     "winston",
     "squeak"
+  ],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "package.json"
   ],
   "author": "Blujedi <blujedicorp@gmail.com>",
   "license": "ISC",
