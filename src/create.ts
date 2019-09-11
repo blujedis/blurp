@@ -15,7 +15,7 @@ import {
  */
 function createTransform<L extends string, O>(type: TransformType, fn: TransformCallback<L>) {
 
-  return (options?: O) => {
+  return (options: O = {} as O) => {
 
     function wrapper(payload: IPayload<L>) {
 

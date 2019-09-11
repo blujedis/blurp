@@ -17,7 +17,7 @@ const loggers = new LoggerStore();
  */
 function createLogger<L extends string>(
   label: string,
-  options?: ILoggerOptions<L>, force: boolean = false): LoggerCompiled<L> {
+  options: ILoggerOptions<L> = {}, force: boolean = false): LoggerCompiled<L> {
   
   let logger = loggers.get<LoggerCompiled<L>>(label);
   

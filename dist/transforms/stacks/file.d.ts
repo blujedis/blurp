@@ -16,6 +16,7 @@ export interface IFileFormatOptions {
     extend?: {
         [key: string]: any;
     };
+    includeLog?: boolean;
 }
 /**
  * Bundled stack for displaying logs in files.

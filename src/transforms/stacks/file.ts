@@ -24,6 +24,7 @@ export interface IFileFormatOptions {
   extend?: {
     [key: string]: any;
   };
+  includeLog?: boolean;            // (default: false) when true includes .log() messages.
 }
 
 /**
@@ -36,15 +37,21 @@ export interface IFileFormatOptions {
  * @param options the stack's options.
  */
 export default function fileFormat<L extends string>(payload: IPayload<L>,
-  options?: IFileFormatOptions) {
+  options: IFileFormatOptions = {}) {
 
   options = {
-    format: 'json', errorify: 'stack', exclude: [],
+    includeLog: false, format: 'json', errorify: 'stack', exclude: [],
     private: true, splat: true, process: 'basic', ...options
   };
 
   const { props, meta, extend, errorify, timestamp, exclude,
     label, splat, private: priv, trace, process: proc } = options;
+
+  const { level } = payload[SOURCE];
+
+  // Exclude generic .log() messages from file.
+  if (level === 'log' && !options.includeLog)
+    return null;
 
   let _props = props || [];
   const _meta = meta === true ? 'meta' : meta;

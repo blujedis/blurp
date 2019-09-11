@@ -25,7 +25,7 @@ const private_1 = __importDefault(require("../modifiers/private"));
  * @param payload the current modified payload.
  * @param options the stack's options.
  */
-function terminalFormat(payload, options) {
+function terminalFormat(payload, options = {}) {
     options = Object.assign({ errorify: 'stack', level: true, colorize: true, exclude: [], private: true, splat: true }, options);
     const { props, colorize, meta, extend, errorify, timestamp, label, splat, private: priv } = options;
     const { level } = payload[types_1.SOURCE];
@@ -114,9 +114,10 @@ function terminalFormat(payload, options) {
         }
         payload = colorize_1.default(payload, opts);
     }
-    // If message level === 'log' remove level
+    // If message level === 'log' remove timestamp, level & label
+    // only include formatted message with meta if any.
     if (level === 'log')
-        _exclude = [..._exclude, 'level'];
+        _exclude = [..._exclude, 'level', 'timestamp', 'label'];
     const withKeys = _metaKeys ? utils_1.getProps(payload, _props).filter(v => !_props.includes(v) && !_exclude.includes(v)) : [];
     return delimited_1.default(payload, {
         props: _props,

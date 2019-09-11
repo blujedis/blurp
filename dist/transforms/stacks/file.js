@@ -22,9 +22,13 @@ const process_1 = __importDefault(require("../modifiers/process"));
  * @param payload the current modified payload.
  * @param options the stack's options.
  */
-function fileFormat(payload, options) {
-    options = Object.assign({ format: 'json', errorify: 'stack', exclude: [], private: true, splat: true, process: 'basic' }, options);
+function fileFormat(payload, options = {}) {
+    options = Object.assign({ includeLog: false, format: 'json', errorify: 'stack', exclude: [], private: true, splat: true, process: 'basic' }, options);
     const { props, meta, extend, errorify, timestamp, exclude, label, splat, private: priv, trace, process: proc } = options;
+    const { level } = payload[types_1.SOURCE];
+    // Exclude generic .log() messages from file.
+    if (level === 'log' && !options.includeLog)
+        return null;
     let _props = props || [];
     const _meta = meta === true ? 'meta' : meta;
     const hasProps = _props.length;

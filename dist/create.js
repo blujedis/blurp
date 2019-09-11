@@ -9,7 +9,7 @@ const types_1 = require("./types");
  * @param fn the callback function to be executed.
  */
 function createTransform(type, fn) {
-    return (options) => {
+    return (options = {}) => {
         function wrapper(payload) {
             const result = {
                 payload,

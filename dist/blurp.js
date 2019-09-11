@@ -14,7 +14,7 @@ const loggers = new stores_1.LoggerStore();
  * @param options the Logger's options.
  * @param force allows overwriting existing Loggers.
  */
-function createLogger(label, options, force = false) {
+function createLogger(label, options = {}, force = false) {
     let logger = loggers.get(label);
     // Return existing logger if 
     // exists and not force to recreate.
