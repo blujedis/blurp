@@ -6,7 +6,7 @@ export declare class LoggerStore {
     values(): IterableIterator<Logger<any>>;
     has(key: string): boolean;
     clear(): this;
-    get(key: string): Logger<any>;
+    get<T extends Logger<any> = Logger<any>>(key: string): T;
     add(key: string, logger: Logger<any>, force?: boolean): Map<string, Logger<any>>;
     remove(key: string, cb?: Callback): this;
 }

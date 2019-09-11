@@ -22,8 +22,8 @@ export class LoggerStore {
     return this;
   }
 
-  get(key: string) {
-    return this.store.get(key);
+  get<T extends Logger<any> = Logger<any>>(key: string) {
+    return this.store.get(key) as T;
   }
 
   add(key: string, logger: Logger<any>, force: boolean = false) {

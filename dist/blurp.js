@@ -15,9 +15,14 @@ const loggers = new stores_1.LoggerStore();
  * @param force allows overwriting existing Loggers.
  */
 function createLogger(label, options, force = false) {
-    const log = new logger_1.Logger(label, options);
-    loggers.add(label, log, force);
-    return log;
+    let logger = loggers.get(label);
+    // Return existing logger if 
+    // exists and not force to recreate.
+    if (logger && !force)
+        return logger;
+    logger = new logger_1.Logger(label, options);
+    loggers.add(label, logger, force);
+    return logger;
 }
 /**
  * Creates the default logger for use with console/terminal.
@@ -25,8 +30,6 @@ function createLogger(label, options, force = false) {
  * @param name the name of the default logger.
  */
 function defaultLogger() {
-    if (loggers.has('default'))
-        return loggers.get('default');
     const _transforms = transforms_1.initTransforms();
     return createLogger('default', {
         transports: [

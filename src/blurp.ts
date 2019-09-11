@@ -18,9 +18,19 @@ const loggers = new LoggerStore();
 function createLogger<L extends string>(
   label: string,
   options?: ILoggerOptions<L>, force: boolean = false): LoggerCompiled<L> {
-  const log = new Logger<L>(label as string, options) as LoggerCompiled<L>;
-  loggers.add(label, log, force);
-  return log;
+  
+  let logger = loggers.get<LoggerCompiled<L>>(label);
+  
+  // Return existing logger if 
+  // exists and not force to recreate.
+  if (logger && !force)
+    return logger;
+
+  logger = new Logger<L>(label as string, options) as LoggerCompiled<L>;
+  loggers.add(label, logger, force);
+
+  return logger;
+
 }
 
 /**
@@ -29,9 +39,6 @@ function createLogger<L extends string>(
  * @param name the name of the default logger.
  */
 function defaultLogger<L extends string = DefaultLevels>() {
-
-  if (loggers.has('default'))
-    return loggers.get('default') as LoggerCompiled<L>;
 
   const _transforms = initTransforms<L>();
 
