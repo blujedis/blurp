@@ -25,9 +25,10 @@ const process_1 = __importDefault(require("../modifiers/process"));
 function fileFormat(payload, options = {}) {
     options = Object.assign({ includeLog: false, format: 'json', errorify: 'stack', exclude: [], private: true, splat: true, process: 'basic' }, options);
     const { props, meta, extend, errorify, timestamp, exclude, label, splat, private: priv, trace, process: proc } = options;
-    const { level } = payload[types_1.SOURCE];
+    const { level, err } = payload[types_1.SOURCE];
     // Exclude generic .log() messages from file.
-    if (level === 'log' && !options.includeLog)
+    // unless are exception or rejection.
+    if (level === 'log' && !options.includeLog && !(err.isException || err.isRejection))
         return null;
     let _props = props || [];
     const _meta = meta === true ? 'meta' : meta;
@@ -50,12 +51,12 @@ function fileFormat(payload, options = {}) {
         addPropsIf('label');
     }
     addPropsIf('message', '...');
+    if (errorify)
+        payload = errorify_1.default(payload, { format: errorify });
     if (_meta) {
         payload = meta_1.default(payload, { prop: _meta });
         addPropsIf(_meta);
     }
-    if (errorify)
-        payload = errorify_1.default(payload, { format: errorify });
     if (trace) {
         // All or accept trace defaults which are
         // triggered on rejections or exceptions.

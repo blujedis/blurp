@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("../../types");
 const os_1 = require("os");
+const utils_1 = require("../../utils");
 /**
  * Transforms payloads contianing errors.
  *
@@ -15,6 +16,8 @@ function errorifyTransform(payload, options) {
     options = Object.assign({ format: 'stack' }, options);
     const { format } = options;
     const { err } = payload[types_1.SOURCE];
+    const parsed = utils_1.errorToObject(err, ['name', 'stack', 'message'], true);
+    payload = Object.assign({}, payload, parsed);
     if (!err || format === 'message')
         return payload;
     let msg = err.name + ': ' + err.message; // detail view with name/type.

@@ -20,11 +20,11 @@ class ExceptionStream extends readable_stream_1.Writable {
      */
     _write(payload, enc, cb) {
         const { err } = payload[types_1.SOURCE];
-        if (err && err.isException) {
+        if (err && (err.isException || err.isRejection)) {
             try {
                 // Even if we get errors in the transform
                 // ignore still write to transport. Maybe
-                // there's a use case not to be for now.
+                // there's a use case not to but for now.
                 const { payload: _payload } = this.transport.transformer(payload);
                 return this.transport.log(_payload, cb);
             }

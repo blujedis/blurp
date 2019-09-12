@@ -28,7 +28,7 @@ const private_1 = __importDefault(require("../modifiers/private"));
 function terminalFormat(payload, options = {}) {
     options = Object.assign({ errorify: 'stack', level: true, colorize: true, exclude: [], private: true, splat: true }, options);
     const { props, colorize, meta, extend, errorify, timestamp, label, splat, private: priv } = options;
-    const { level } = payload[types_1.SOURCE];
+    const { level, err } = payload[types_1.SOURCE];
     const { colors, levels } = payload[types_1.CONFIG];
     let _props = props || [];
     let _exclude = options.exclude;
@@ -75,12 +75,12 @@ function terminalFormat(payload, options = {}) {
         if (levelConf.pad)
             payload = pad_1.default(payload);
     }
+    if (errorify)
+        payload = errorify_1.default(payload, { format: errorify });
     if (_meta) {
         payload = meta_1.default(payload, { prop: _meta });
         addPropsIf(_meta);
     }
-    if (errorify)
-        payload = errorify_1.default(payload, { format: errorify });
     if (colorize && colors) {
         const opts = {};
         for (const k in colors) {
@@ -116,7 +116,8 @@ function terminalFormat(payload, options = {}) {
     }
     // If message level === 'log' remove timestamp, level & label
     // only include formatted message with meta if any.
-    if (level === 'log')
+    // this is excluding rejections or exceptions.
+    if (level === 'log' && !(err.isRejection || err.isException))
         _exclude = [..._exclude, 'level', 'timestamp', 'label'];
     const withKeys = _metaKeys ? utils_1.getProps(payload, _props).filter(v => !_props.includes(v) && !_exclude.includes(v)) : [];
     return delimited_1.default(payload, {

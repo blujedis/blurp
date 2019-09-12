@@ -1,5 +1,6 @@
 import { IPayload, SOURCE } from '../../types';
 import { EOL } from 'os';
+import { errorToObject } from '../../utils';
 
 export type ErrorifyFormat = 'message' | 'stack' | 'detail' | 'detailstack';
 
@@ -10,7 +11,6 @@ export interface IErrorifyTransformOptions {
   // message    - does nothing just uses default.
   // stack      - replaces message with stacktrace.
   // detail     - replaces message with error name/type and message.
-  // pushstack  - 
 
   format?: ErrorifyFormat;    // (default: stack)
 
@@ -30,6 +30,8 @@ export default function errorifyTransform<L extends string>(payload: IPayload<L>
   options = { format: 'stack', ...options };
   const { format } = options;
   const { err } = payload[SOURCE];
+  const parsed = errorToObject(err, ['name', 'stack', 'message'], true);
+  payload = { ...payload, ...parsed };
   if (!err || format === 'message')
     return payload;
   let msg = err.name + ': ' + err.message; // detail view with name/type.

@@ -126,9 +126,12 @@ export function padIf(direction: 'left' | 'right', value: any, min: number, char
 export function errorToObject(err: Error, props: string[] = [], omit: boolean = false) {
 
   let ownProps = Object.getOwnPropertyNames(err);
+
   if (props.length) {
-    if (!omit) ownProps = props;
-    else ownProps.filter(p => !props.includes(p));
+    if (!omit)
+      ownProps = props;
+    else
+      ownProps = ownProps.filter(p => !props.includes(p));
   }
 
   return ownProps.reduce((a, c) => {

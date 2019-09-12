@@ -53,11 +53,13 @@ export interface ITerminalFormatOptions {
 export default function terminalFormat<L extends string>(payload: IPayload<L>,
   options: ITerminalFormatOptions = {}): string {
 
-  options = { errorify: 'stack', level: true, 
-  colorize: true, exclude: [], private: true, splat: true, ...options };
+  options = {
+    errorify: 'stack', level: true,
+    colorize: true, exclude: [], private: true, splat: true, ...options
+  };
 
   const { props, colorize, meta, extend, errorify, timestamp, label, splat, private: priv } = options;
-  const { level } = payload[SOURCE];
+  const { level, err } = payload[SOURCE];
   const { colors, levels } = payload[CONFIG];
 
   let _props = props || [];
@@ -120,13 +122,13 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
 
   }
 
+  if (errorify)
+    payload = errorifyTransform(payload, { format: errorify });
+
   if (_meta) {
     payload = metaTransform(payload, { prop: _meta });
     addPropsIf(_meta);
   }
-
-  if (errorify)
-    payload = errorifyTransform(payload, { format: errorify });
 
   if (colorize && colors) {
 
@@ -178,7 +180,8 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
 
   // If message level === 'log' remove timestamp, level & label
   // only include formatted message with meta if any.
-  if (level === 'log')
+  // this is excluding rejections or exceptions.
+  if (level === 'log' && !(err.isRejection || err.isException))
     _exclude = [..._exclude, 'level', 'timestamp', 'label'];
 
   const withKeys = _metaKeys ? getProps(payload, _props).filter(v => !_props.includes(v) && !_exclude.includes(v)) : [];

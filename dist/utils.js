@@ -127,7 +127,7 @@ function errorToObject(err, props = [], omit = false) {
         if (!omit)
             ownProps = props;
         else
-            ownProps.filter(p => !props.includes(p));
+            ownProps = ownProps.filter(p => !props.includes(p));
     }
     return ownProps.reduce((a, c) => {
         a[c] = err[c];

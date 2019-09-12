@@ -47,10 +47,11 @@ export default function fileFormat<L extends string>(payload: IPayload<L>,
   const { props, meta, extend, errorify, timestamp, exclude,
     label, splat, private: priv, trace, process: proc } = options;
 
-  const { level } = payload[SOURCE];
+  const { level, err } = payload[SOURCE];
 
   // Exclude generic .log() messages from file.
-  if (level === 'log' && !options.includeLog)
+  // unless are exception or rejection.
+  if (level === 'log' && !options.includeLog && !(err.isException || err.isRejection))
     return null;
 
   let _props = props || [];
@@ -83,13 +84,13 @@ export default function fileFormat<L extends string>(payload: IPayload<L>,
 
   addPropsIf('message', '...');
 
+  if (errorify)
+  payload = errorifyTransform(payload, { format: errorify });
+
   if (_meta) {
     payload = metaTransform(payload, { prop: _meta });
     addPropsIf(_meta);
   }
-
-  if (errorify)
-    payload = errorifyTransform(payload, { format: errorify });
 
   if (trace) {
     // All or accept trace defaults which are
