@@ -28,7 +28,7 @@ function fileFormat(payload, options = {}) {
     const { level, err } = payload[types_1.SOURCE];
     // Exclude generic .log() messages from file.
     // unless are exception or rejection.
-    if (level === 'log' && !options.includeLog && !(err.isException || err.isRejection))
+    if (level === 'log' && !options.includeLog && !(err && (err.isException || err.isRejection)))
         return null;
     let _props = props || [];
     const _meta = meta === true ? 'meta' : meta;

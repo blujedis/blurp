@@ -16,7 +16,7 @@ function errorifyTransform(payload, options) {
     options = Object.assign({ format: 'stack' }, options);
     const { format } = options;
     const { err } = payload[types_1.SOURCE];
-    const parsed = utils_1.errorToObject(err, ['name', 'stack', 'message'], true);
+    const parsed = err ? utils_1.errorToObject(err, ['name', 'stack', 'message'], true) : {};
     payload = Object.assign({}, payload, parsed);
     if (!err || format === 'message')
         return payload;

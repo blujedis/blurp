@@ -30,7 +30,7 @@ export default function errorifyTransform<L extends string>(payload: IPayload<L>
   options = { format: 'stack', ...options };
   const { format } = options;
   const { err } = payload[SOURCE];
-  const parsed = errorToObject(err, ['name', 'stack', 'message'], true);
+  const parsed = err ? errorToObject(err, ['name', 'stack', 'message'], true) : {};
   payload = { ...payload, ...parsed };
   if (!err || format === 'message')
     return payload;

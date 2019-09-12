@@ -181,7 +181,7 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
   // If message level === 'log' remove timestamp, level & label
   // only include formatted message with meta if any.
   // this is excluding rejections or exceptions.
-  if (level === 'log' && !(err.isRejection || err.isException))
+  if (level === 'log' && !(err && (err.isRejection || err.isException)))
     _exclude = [..._exclude, 'level', 'timestamp', 'label'];
 
   const withKeys = _metaKeys ? getProps(payload, _props).filter(v => !_props.includes(v) && !_exclude.includes(v)) : [];
