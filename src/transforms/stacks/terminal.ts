@@ -60,7 +60,7 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
 
   const { props, colorize, meta, extend, errorify, timestamp, label, splat, private: priv } = options;
   const { level, err } = payload[SOURCE];
-  const { colors, levels } = payload[CONFIG];
+  const { colors } = payload[CONFIG];
 
   let _props = props || [];
   let _exclude = options.exclude;
@@ -80,7 +80,7 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
   } : options.level;
 
   const colorConf = normalizeConf(colorize, {
-    level: (colors || {} as any)[level as L],
+    level: (colors || {} as any)[level as L] || null,
     message: null
   });
 
@@ -93,7 +93,6 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
   if (timestamp) {
     const _format = timestamp === true ? 'short' : timestamp;
     payload = timestampTransform(payload, { format: _format });
-    colorConf.timestamp = colorConf.timestamp || 'gray';
     addPropsIf('timestamp', 'level');
   }
   else {
@@ -130,46 +129,27 @@ export default function terminalFormat<L extends string>(payload: IPayload<L>,
     addPropsIf(_meta);
   }
 
-  if (colorize && colors) {
+  if (colorize) {
 
     const opts: IColorizeTransformOptions<L> = {};
 
-    for (const k in colors) {
+    for (const k in colorConf) {
 
-      if (!colors.hasOwnProperty(k)) continue;
+      if (!colorConf.hasOwnProperty(k) || !payload.hasOwnProperty(k)) continue;
 
-      // Colorize the levels and optional matching message.
+      if ('level' === k && colorConf.level) {
 
-      if (levels.includes(k as L) || k === 'log') {
-
-        if (level === k) {
-
-          if (colorConf.level) {
-            opts[k] = {
-              prop: 'level',
-              condition: k,
-              style: colors[k]
-            };
-          }
-
-          if (colorConf.message) {
-            // @ts-ignore override user constraint.
-            opts[k + '-message'] = {
-              prop: 'message',
-              matchProp: 'level',
-              condition: k,
-              style: colors[k]
-            };
-
-          }
-
-        }
+        opts[k] = {
+          prop: 'level',
+          condition: level,
+          style: colorConf.level
+        };
 
       }
 
       // Colorize non levels.
       else if (colorConf[k]) {
-        opts[k] = colors[k];
+        opts[k] = colorConf[k];
       }
 
     }
