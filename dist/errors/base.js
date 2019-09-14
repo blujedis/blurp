@@ -57,8 +57,9 @@ class BaseHandler {
             err.isException = true;
         else
             err.isRejection = true;
-        // @ts-ignore
         this.logger.log({
+            // @ts-ignore
+            level: this.logger.options.errorLevel,
             message: err
         });
         if (shouldExit)

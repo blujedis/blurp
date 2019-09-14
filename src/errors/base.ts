@@ -74,8 +74,9 @@ export default class BaseHandler<L extends string = any> {
     else
       err.isRejection = true;
 
-    // @ts-ignore
     this.logger.log({
+      // @ts-ignore
+      level: this.logger.options.errorLevel,
       message: err
     });
 

@@ -21,8 +21,8 @@ export const DEFAULT_LEVELS: DefaultLevels[] = ['fatal', 'error', 'warn', 'info'
 export const DEFAULT_COLORS: Colors<DefaultLevels> = {
 
   // Levels
-  fatal: ['bgRed', 'yellow'],
-  error: ['red', 'bold'],
+  fatal: ['bgRed', 'white', 'bold'],
+  error: ['red'],
   warn: 'yellow',
   info: 'cyan',
   debug: 'magenta',

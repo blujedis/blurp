@@ -15,6 +15,8 @@ function pad(payload, options) {
     const { char, position } = options;
     const { levels } = payload[types_1.CONFIG];
     const { level } = payload[types_1.SOURCE];
+    if (!levels.includes(level))
+        return payload;
     // gets longest.
     const maxLen = Math.max(...levels.map(v => v.length));
     // get map of all paddings.

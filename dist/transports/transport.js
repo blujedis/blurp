@@ -186,7 +186,8 @@ class Transport extends base_1.Base {
         // If muted, invalid level or is exception reject.
         // exceptions handled directly by Exception stream.
         if (this.muted || !this.isActiveLevel(level, this.level) ||
-            ((err && err.isException) && this.options.exceptions))
+            (err && err.isException && this.options.exceptions) ||
+            (err && err.isRejection && this.options.rejections))
             return false;
         return true;
     }

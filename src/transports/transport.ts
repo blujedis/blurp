@@ -254,7 +254,8 @@ export abstract class Transport
     // If muted, invalid level or is exception reject.
     // exceptions handled directly by Exception stream.
     if (this.muted || !this.isActiveLevel(level as L, this.level) ||
-      ((err && err.isException) && this.options.exceptions))
+      (err && err.isException && this.options.exceptions) ||
+      (err && err.isRejection && this.options.rejections))
       return false;
 
     return true;

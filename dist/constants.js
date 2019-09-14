@@ -15,8 +15,8 @@ exports.FORMAT_EXP = /%[scdjifoO%]/g;
 exports.DEFAULT_LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
 exports.DEFAULT_COLORS = {
     // Levels
-    fatal: ['bgRed', 'yellow'],
-    error: ['red', 'bold'],
+    fatal: ['bgRed', 'white', 'bold'],
+    error: ['red'],
     warn: 'yellow',
     info: 'cyan',
     debug: 'magenta',

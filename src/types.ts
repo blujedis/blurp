@@ -147,6 +147,7 @@ export interface ILoggerOptions<L extends string> extends ITransportBaseOptions<
   levels?: L[];
   colors?: Colors<L>;
   errorExit?: boolean;
+  errorLevel?: L;
   transports?: Transport<L, any> | Array<Transport<L, any>>;
 }
 

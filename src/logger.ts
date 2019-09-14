@@ -50,6 +50,11 @@ export class Logger<L extends string> extends Base<L, ILoggerOptions<L>> {
     // If no level specified choose highest level.
     this.options.level = this.options.level || this.options.levels[this.options.levels.length - 1];
 
+    // For exception/rejection errors level use user
+    // defined or lowest level to ensure logging.
+    this.options.errorLevel = 
+      this.options.errorLevel || this.options.levels[0];
+
     // Initialize the Logger.
     this.init();
 

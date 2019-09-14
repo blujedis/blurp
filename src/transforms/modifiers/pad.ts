@@ -24,6 +24,9 @@ export default function pad<L extends string>(payload: IPayload<L>,
   const { levels } = payload[CONFIG];
   const { level } = payload[SOURCE];
 
+  if (!levels.includes(level)) 
+    return payload;
+
   // gets longest.
   const maxLen = Math.max(...levels.map(v => v.length));
 
