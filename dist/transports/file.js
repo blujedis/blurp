@@ -24,7 +24,7 @@ const DEFAULTS = {
 };
 class FileTransport extends transport_1.Transport {
     constructor(options) {
-        super('console', Object.assign({}, DEFAULTS, options));
+        super('console', Object.assign(Object.assign({}, DEFAULTS), options));
         options = this.options;
         const verbose = options.verbose;
         options.verbose = false;

@@ -12,8 +12,8 @@ export declare abstract class Base<L extends string, O extends ITransportOptions
      * Compiles Transforms and Formats into compiled function.
      */
     protected compile(): this;
-    protected readonly console: InternalLogger;
-    readonly level: L;
+    protected get console(): InternalLogger;
+    get level(): L;
     /**
      * Gets all options.
      *

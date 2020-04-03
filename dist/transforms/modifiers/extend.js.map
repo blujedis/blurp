@@ -1,1 +1,1 @@
-{"version":3,"file":"extend.js","sourceRoot":"","sources":["../../../src/transforms/modifiers/extend.ts"],"names":[],"mappings":";;AAMA;;;;;;;;GAQG;AACH,SAAwB,eAAe,CAAmB,OAAoB,EAC5E,OAAgC;IAChC,yBAAY,OAAO,EAAK,OAAO,EAAG;AACpC,CAAC;AAHD,kCAGC"}
+{"version":3,"file":"extend.js","sourceRoot":"","sources":["../../../src/transforms/modifiers/extend.ts"],"names":[],"mappings":";;AAMA;;;;;;;;GAQG;AACH,SAAwB,eAAe,CAAmB,OAAoB,EAC5E,OAAgC;IAChC,uCAAY,OAAO,GAAK,OAAO,EAAG;AACpC,CAAC;AAHD,kCAGC"}

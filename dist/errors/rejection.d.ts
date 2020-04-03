@@ -5,5 +5,5 @@ export declare class RejectionHandler<L extends string> extends BaseHandler {
     /**
      * Gets bound Transports of type handleRejections.
      */
-    readonly transports: import("..").Transport<any, any>[];
+    get transports(): import("..").Transport<any, any>[];
 }

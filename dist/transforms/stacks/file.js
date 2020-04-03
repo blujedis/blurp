@@ -37,7 +37,7 @@ function fileFormat(payload, options = {}) {
     if (priv && !private_1.default(payload))
         return null;
     if (extend)
-        payload = Object.assign({}, payload, extend);
+        payload = Object.assign(Object.assign({}, payload), extend);
     if (splat)
         payload = splat_1.default(payload);
     if (timestamp) {

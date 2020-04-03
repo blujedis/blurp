@@ -17,7 +17,7 @@ function errorifyTransform(payload, options) {
     const { format } = options;
     const { err } = payload[types_1.SOURCE];
     const parsed = err ? utils_1.errorToObject(err, ['name', 'stack', 'message'], true) : {};
-    payload = Object.assign({}, payload, parsed);
+    payload = Object.assign(Object.assign({}, payload), parsed);
     if (!err || format === 'message')
         return payload;
     let msg = err.name + ': ' + err.message; // detail view with name/type.

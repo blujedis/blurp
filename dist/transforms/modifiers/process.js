@@ -65,14 +65,14 @@ function processTransform(payload, options) {
             _process = loadProcess(map.process[proc]);
         else
             _process = loadProcess(getActiveKeys(proc));
-        payload = Object.assign({}, payload, { [processKey || 'process']: _process });
+        payload = Object.assign(Object.assign({}, payload), { [processKey || 'process']: _process });
     }
     if (system) {
         if (typeof system === 'string' && map.system[system])
             _system = loadSystem(map.system[system]);
         else
             _system = loadSystem(getActiveKeys(system));
-        payload = Object.assign({}, payload, { [systemKey || 'system']: _system });
+        payload = Object.assign(Object.assign({}, payload), { [systemKey || 'system']: _system });
     }
     return payload;
 }

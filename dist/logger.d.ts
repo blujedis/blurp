@@ -44,13 +44,14 @@ export declare class Logger<L extends string> extends Base<L, ILoggerOptions<L>>
      * @param splat optional splat used for formatting message & metadata.
      */
     private createPayload;
-    readonly levels: L[];
-    level: L;
-    readonly index: number;
+    get levels(): L[];
+    get level(): L;
+    set level(level: L);
+    get index(): number;
     /**
      * Returns current piped Transports.
      */
-    readonly piped: any[];
+    get piped(): any[];
     /**
      * Ensures payload contains required defaults as well as source and options Symbols.
      *

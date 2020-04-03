@@ -100,7 +100,7 @@ function combine(...stack) {
                 return '--b';
             }
             // Overwrite with new values.
-            return Object.assign({}, result, tmp);
+            return Object.assign(Object.assign({}, result), tmp);
         }, { payload, errors: [] });
         // Default output to message.
         let { [types_1.OUTPUT]: output, [types_1.SOURCE]: source } = _result.payload;

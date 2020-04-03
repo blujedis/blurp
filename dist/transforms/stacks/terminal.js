@@ -48,7 +48,7 @@ function terminalFormat(payload, options = {}) {
         message: null
     });
     if (extend)
-        payload = Object.assign({}, payload, extend);
+        payload = Object.assign(Object.assign({}, payload), extend);
     if (splat)
         payload = splat_1.default(payload);
     if (timestamp) {

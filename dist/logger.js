@@ -64,7 +64,7 @@ class Logger extends base_1.Base {
                 return cb();
             // No Transports can't do anything.
             if (!this.stream._readableState.pipes) {
-                const _a = types_1.CONFIG, c = payload[_a], _b = types_1.SOURCE, s = payload[_b], _c = types_1.OUTPUT, o = payload[_c], clean = __rest(payload, [typeof _a === "symbol" ? _a : _a + "", typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + ""]);
+                const _a = payload, _b = types_1.CONFIG, c = _a[_b], _c = types_1.SOURCE, s = _a[_c], _d = types_1.OUTPUT, o = _a[_d], clean = __rest(_a, [typeof _b === "symbol" ? _b : _b + "", typeof _c === "symbol" ? _c : _c + "", typeof _d === "symbol" ? _d : _d + ""]);
                 this.console.warn(`${os_1.EOL}Logger ${this.label} failed using Transports of undefined${os_1.EOL}${os_1.EOL}Payload:${os_1.EOL} %O${os_1.EOL}`, clean);
                 return cb(null);
             }
@@ -153,7 +153,7 @@ class Logger extends base_1.Base {
         if (cb)
             splat = splat.slice(0, splat.length - 1);
         return {
-            payload: (!isArray ? Object.assign({}, payloadOrSplat, { splat }) : undefined),
+            payload: (!isArray ? Object.assign(Object.assign({}, payloadOrSplat), { splat }) : undefined),
             splat,
             cb
         };
@@ -199,7 +199,7 @@ class Logger extends base_1.Base {
         // Check if message is an error
         if (payload.message instanceof Error) {
             err = payload.message;
-            payload = Object.assign({}, payload, { message: err.message });
+            payload = Object.assign(Object.assign({}, payload), { message: err.message });
             payload.err = err;
         }
         const tokenLen = (payload.message.match(constants_1.FORMAT_EXP) || []).length;
@@ -213,7 +213,7 @@ class Logger extends base_1.Base {
             if (typeof c === 'undefined')
                 return a;
             if (typeof c === 'object' && c !== null)
-                a.meta = Object.assign({}, a.meta, c);
+                a.meta = Object.assign(Object.assign({}, a.meta), c);
             else
                 a.splat = [...a.splat, c];
             return a;
@@ -221,7 +221,7 @@ class Logger extends base_1.Base {
         // Add non token args to end of splat. util.format
         // will simply add these to end of formatted message.
         payload.splat = [...payload.splat.slice(0, tokenLen), ...parsed.splat];
-        payload = Object.assign({}, payload, parsed.meta // merge in any non-splat objects to payload.
+        payload = Object.assign(Object.assign({}, payload), parsed.meta // merge in any non-splat objects to payload.
         );
         return {
             payload: this.extendPayload(payload),
@@ -261,10 +261,10 @@ class Logger extends base_1.Base {
      */
     extendPayload(payload) {
         // Ensure defaults.
-        payload = Object.assign({}, constants_1.PAYLOAD_DEFAULTS, payload);
+        payload = Object.assign(Object.assign({}, constants_1.PAYLOAD_DEFAULTS), payload);
         // Clone payload as source object.
         const source = payload[types_1.SOURCE];
-        payload[types_1.SOURCE] = Object.assign({}, source, payload);
+        payload[types_1.SOURCE] = Object.assign(Object.assign({}, source), payload);
         // Create the configuration object.
         payload[types_1.CONFIG] = {
             label: this.label,
@@ -325,7 +325,7 @@ class Logger extends base_1.Base {
         child.stream = Object.create(child.stream, {
             write: {
                 value(chunk, cb) {
-                    chunk = Object.assign({}, chunk, meta);
+                    chunk = Object.assign(Object.assign({}, chunk), meta);
                     parent.stream.write(chunk, cb);
                     return true;
                 }

@@ -23,9 +23,10 @@ export declare abstract class Transport<L extends string, O extends ITransportOp
      * @param cb the callback on completed to continue stream.
      */
     private _writev;
-    level: L;
-    readonly levels: L[];
-    readonly index: number;
+    get level(): L;
+    set level(level: L);
+    get levels(): L[];
+    get index(): number;
     /**
      * Compiles Transforms into single Transformer function.
      */

@@ -12,7 +12,7 @@ class Base extends events_1.EventEmitter {
         this.muted = false;
         this.setMaxListeners(10);
         options.transforms = utils_1.ensureArray(options.transforms);
-        this.options = Object.assign({}, constants_1.TRANSPORT_DEFAULTS, options);
+        this.options = Object.assign(Object.assign({}, constants_1.TRANSPORT_DEFAULTS), options);
         // Compile Transformer.
         this.compile();
     }

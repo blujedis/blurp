@@ -25,7 +25,7 @@ export default class BaseHandler<L extends string = any> {
     /**
      * Gets list of handlers that support event type.
      */
-    readonly transports: Array<Transport<L, any>>;
+    get transports(): Array<Transport<L, any>>;
     /**
      * Iterates array of Transports and binds handlers.
      *

@@ -60,20 +60,21 @@ export declare class Query<L extends string, O extends IQueryOptions<L> = IQuery
     /**
      * Gets the loaded rows using getter.
      */
-    readonly rows: object[];
+    get rows(): object[];
     /**
      * Gets all filtered rows using getter.
      */
-    readonly filtered: object[];
+    get filtered(): object[];
     /**
      * Gets all bound Transports for query.
      */
+    get transports(): Array<string | Transport<L, any>>;
     /**
-    * Sets Tranports array.
-    *
-    * @param transports an array of Transport names or instances.
-    */
-    transports: Array<string | Transport<L, any>>;
+     * Sets Tranports array.
+     *
+     * @param transports an array of Transport names or instances.
+     */
+    set transports(transports: Array<string | Transport<L, any>>);
     /**
      * Adds a Transport to be added to collection.
      *

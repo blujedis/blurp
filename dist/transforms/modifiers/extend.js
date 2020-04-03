@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param options the transform's options.
  */
 function extendTransform(payload, options) {
-    return Object.assign({}, payload, options);
+    return Object.assign(Object.assign({}, payload), options);
 }
 exports.default = extendTransform;
 //# sourceMappingURL=extend.js.map

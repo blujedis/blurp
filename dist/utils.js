@@ -186,7 +186,7 @@ exports.toArrayValues = toArrayValues;
  * @param exclude array of properties to exclude.
  */
 function reducePayload(obj, props, exclude) {
-    return getProps(obj, props, exclude).reduce((result, key) => (Object.assign({}, result, { [key]: obj[key] })), {});
+    return getProps(obj, props, exclude).reduce((result, key) => (Object.assign(Object.assign({}, result), { [key]: obj[key] })), {});
 }
 exports.reducePayload = reducePayload;
 /**
@@ -238,7 +238,7 @@ function normalizeConf(conf, defaults) {
         return null;
     if (conf === true)
         return Object.assign({}, defaults);
-    return Object.assign({}, defaults, conf);
+    return Object.assign(Object.assign({}, defaults), conf);
 }
 exports.normalizeConf = normalizeConf;
 /**

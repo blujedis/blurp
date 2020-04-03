@@ -37,7 +37,7 @@ export declare class FileTransport<L extends string> extends Transport<L, IFileT
     /**
      * Gets the active filename.
      */
-    readonly filename: string;
+    get filename(): string;
     /**
      * Callback handler on new file created.
      *
